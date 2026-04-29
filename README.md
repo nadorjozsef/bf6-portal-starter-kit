@@ -4,6 +4,8 @@ This is a ready-made template for starting Battlefield 6 Portal development. Itâ
 top of `bf6-portal-utils`, that gives you a clean, object-oriented structure plus a set of core gameplay mechanics out
 of the box.
 
+Watch the overview video: https://youtu.be/6irOLGJkK6Q
+
 ## Why use this template?
 
 - **Solid starting feature set**: included familiar UI elements, handling of capture points, team/player state, and a

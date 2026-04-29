@@ -26,18 +26,19 @@ website. For more info about building and deployment workflows, see: https://git
 
 ## Underlying utility layer
 
-This project is built on top of `bf6-portal-utils`. If you need to update the underlying shared layer or inspect how the template wiring works,
-check the project here:
+This project is built on top of `bf6-portal-utils`. If you need to update the underlying shared layer or inspect how the
+template wiring works, check the project here:
 
 https://github.com/deluca-mike/bf6-portal-utils
 
-The starter kit is intentionally thin above that utility layer, so most low-level Portal integration,
-UI helpers, and event wiring are implemented in `bf6-portal-utils`.
+The starter kit is intentionally thin above that utility layer, so most low-level Portal integration, UI helpers, and
+event wiring are implemented in `bf6-portal-utils`.
 
 ## Create your own Portal mod
 
 1. **Start with game logic**: adapt `src/modules/gameMode/gameMode.ts` and implement your new rules/event handling.
-2. **Extend the data model if needed**: add new properties to state classes in modules such as `src/modules/player/player.ts`, `src/modules/team/team.ts`, or `src/modules/capturePoint/capturePoint.ts`.
+2. **Extend the data model if needed**: add new properties to state classes in modules such as
+   `src/modules/player/player.ts`, `src/modules/team/team.ts`, or `src/modules/capturePoint/capturePoint.ts`.
 3. **Add UI elements if needed**: implement new UI widgets in `src/modules/gameUI/gameUI.ts`.
 4. **Wire UI to state**: connect accessors and game state via `src/modules/gameUI/gameUIManager.ts`.
 

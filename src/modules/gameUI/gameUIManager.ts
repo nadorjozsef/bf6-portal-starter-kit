@@ -1,18 +1,28 @@
-import { Events } from "bf6-portal-utils/events";
-import type { GameUI } from "../gameUI/gameUI";
-import type { TeamManager } from "../team/teamManager";
-import type { Team } from "../team/team";
-import type { CapturePointManager } from "../capturePoint/capturePointManager";
-import type { GameMode } from "../gameMode/gameMode";
+import { Events } from 'bf6-portal-utils/events';
+import type { GameUI } from '../gameUI/gameUI';
+import type { TeamManager } from '../team/teamManager';
+import type { Team } from '../team/team';
+import type { CapturePointManager } from '../capturePoint/capturePointManager';
+import type { GameMode } from '../gameMode/gameMode';
 
 export class GameUIManager {
     private static _instance: GameUIManager | undefined;
 
-    private constructor(private _gameUI: GameUI, private _teamManager: TeamManager, private _capturePointManager: CapturePointManager, private _gameMode: GameMode) {
+    private constructor(
+        private _gameUI: GameUI,
+        private _teamManager: TeamManager,
+        private _capturePointManager: CapturePointManager,
+        private _gameMode: GameMode
+    ) {
         Events.OnGameModeStarted.subscribe(this.handleGameModeStarted.bind(this));
     }
 
-    static getInstance(gameUI: GameUI, teamManager: TeamManager, capturePointManager: CapturePointManager, gameMode: GameMode): GameUIManager {
+    static getInstance(
+        gameUI: GameUI,
+        teamManager: TeamManager,
+        capturePointManager: CapturePointManager,
+        gameMode: GameMode
+    ): GameUIManager {
         if (!GameUIManager._instance) {
             GameUIManager._instance = new GameUIManager(gameUI, teamManager, capturePointManager, gameMode);
         }
@@ -39,7 +49,7 @@ export class GameUIManager {
     }
 
     private showCapturePoints(team1: Team, team2: Team): void {
-        const capturePointsData = this._capturePointManager.getCapturePoints().map(capturePoint => ({
+        const capturePointsData = this._capturePointManager.getCapturePoints().map((capturePoint) => ({
             ownerTeamIdAccessor: capturePoint.ownerTeamIdAccessor,
             isCapturingAccessor: capturePoint.isCapturingAccessor,
         }));

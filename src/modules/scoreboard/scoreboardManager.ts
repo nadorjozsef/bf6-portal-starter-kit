@@ -7,7 +7,10 @@ import { Timers } from 'bf6-portal-utils/timers';
 export class ScoreboardManager {
     private static _instance: ScoreboardManager | undefined;
 
-    private constructor(private _scoreboard: Scoreboard, playerManager: PlayerManager) {
+    private constructor(
+        private _scoreboard: Scoreboard,
+        playerManager: PlayerManager
+    ) {
         playerManager.subscribePlayerJoinGame(this.handlePlayerJoinGame.bind(this));
     }
 

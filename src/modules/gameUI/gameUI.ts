@@ -26,7 +26,7 @@ interface CapturePointData {
 export class GameUI {
     private static _instance: GameUI | undefined;
 
-    private constructor() { }
+    private constructor() {}
 
     static getInstance(): GameUI {
         if (!GameUI._instance) {

@@ -19,10 +19,7 @@ export class GameMode {
         Events.OnCapturePointCaptured.subscribe(this.handleCapturePointCaptured.bind(this));
     }
 
-    static GetInstance(
-        playerManager: PlayerManager,
-        teamManager: TeamManager
-    ): GameMode {
+    static GetInstance(playerManager: PlayerManager, teamManager: TeamManager): GameMode {
         if (!GameMode._instance) {
             GameMode._instance = new GameMode(playerManager, teamManager);
         }

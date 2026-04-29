@@ -4,7 +4,7 @@ export class CapturePoint {
     private _ownerTeamId = SolidUI.createSignal(0);
     private _isCapturing = SolidUI.createSignal(false);
 
-    constructor(private _modCapturePoint: mod.CapturePoint) { }
+    constructor(private _modCapturePoint: mod.CapturePoint) {}
 
     get id(): number {
         return mod.GetObjId(this._modCapturePoint);

@@ -4,7 +4,7 @@ export class Team {
     private _scoreSignal = SolidUI.createSignal(0);
     private _activePlayersSignal = SolidUI.createSignal(0);
 
-    constructor(private _modTeam: mod.Team) { }
+    constructor(private _modTeam: mod.Team) {}
 
     get id(): number {
         return mod.GetObjId(this._modTeam);

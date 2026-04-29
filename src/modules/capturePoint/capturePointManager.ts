@@ -1,6 +1,6 @@
-import { Events } from "bf6-portal-utils/events";
-import { CapturePoint } from "./capturePoint";
-import { convertArray } from "../../helpers";
+import { Events } from 'bf6-portal-utils/events';
+import { CapturePoint } from './capturePoint';
+import { convertArray } from '../../helpers';
 
 export class CapturePointManager {
     private static _instance: CapturePointManager | undefined;
@@ -34,7 +34,7 @@ export class CapturePointManager {
         } else {
             capturePointId = mod.GetObjId(capturePoint);
         }
-        const found = this._capturePoints.find(capturePoint => capturePoint.id === capturePointId);
+        const found = this._capturePoints.find((capturePoint) => capturePoint.id === capturePointId);
         if (!found) {
             throw new Error(`Capture point not found for ID: ${capturePointId}`);
         }

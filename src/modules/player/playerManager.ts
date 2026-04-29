@@ -33,7 +33,7 @@ export class PlayerManager {
         if (index !== -1) {
             this._players.splice(index, 1);
         }
-        this.unsubscribePlayerJoinGame(player => player.id === playerId);
+        this.unsubscribePlayerJoinGame((player) => player.id === playerId);
     }
 
     public subscribePlayerJoinGame(callback: PlayerJoinCallback): void {

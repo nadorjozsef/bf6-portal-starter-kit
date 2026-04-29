@@ -1,0 +1,19 @@
+{
+    "gameUI": {
+        "lifeCount": "Life: {}",
+        "reinforcementsLabel": "Reinforcements",
+        "reinforcementsTime": "{}",
+        "leftActivePlayersText": "{}",
+        "activePlayersTextCenter": "vs",
+        "rightActivePlayersText": "{}",
+        "teamScore": "{}",
+        "capturePointA": "A",
+        "capturePointB": "B",
+        "capturePointC": "C",
+        "capturePointD": "D",
+        "capturePointE": "E",
+        "capturePointF": "F",
+        "capturePointG": "G",
+        "circle": "\u25cf"
+    }
+}

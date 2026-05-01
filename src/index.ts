@@ -6,6 +6,7 @@ import { Scoreboard } from './modules/scoreboard/scoreboard.ts';
 import { CapturePointManager } from './modules/capturePoint/capturePointManager.ts';
 import { GameUIManager } from './modules/gameUI/gameUIManager.ts';
 import { ScoreboardManager } from './modules/scoreboard/scoreboardManager.ts';
+import { HQManager } from './modules/HQ/HQManager.ts';
 import { debug } from './debugTool/adminDebugTool.ts';
 
 const gameUI = GameUI.getInstance();
@@ -14,5 +15,6 @@ const scoreboard = Scoreboard.getInstance();
 const teamManager = TeamManager.getInstance();
 const capturePointManager = CapturePointManager.getInstance();
 const gameModeManager = GameMode.GetInstance(playerManager, teamManager);
-GameUIManager.getInstance(gameUI, teamManager, capturePointManager, gameModeManager);
+HQManager.getInstance();
+GameUIManager.getInstance(gameUI, playerManager, teamManager, capturePointManager);
 ScoreboardManager.getInstance(scoreboard, playerManager);

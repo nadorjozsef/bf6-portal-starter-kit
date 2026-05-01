@@ -3,7 +3,7 @@ export interface Config {
     capturePoint: CapturePointConfig;
     player: PlayerConfig;
     teams: TeamsConfig[];
-    teamHQMapping: TeamHQMapping[];
+    restrictedAreas: RestrictedArea[];
 }
 
 export interface GameModeConfig {
@@ -24,9 +24,9 @@ export interface TeamsConfig {
     teamId: number,
 }
 
-export interface TeamHQMapping {
-    teamId: number,
-    hqId: number,
+export interface RestrictedArea {
+    id: number,
+    ownerTeamId?: number,
 }
 
 export const config: Config = {
@@ -45,8 +45,8 @@ export const config: Config = {
         { teamId: 1 },
         { teamId: 2 },
     ],
-    teamHQMapping: [
-        { teamId: 1, hqId: 301 },
-        { teamId: 2, hqId: 302 },
+    restrictedAreas: [
+        { id: 301, ownerTeamId: 1 },
+        { id: 302, ownerTeamId: 2 },
     ],
 };

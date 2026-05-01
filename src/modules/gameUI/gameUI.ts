@@ -26,7 +26,7 @@ interface CapturePointData {
 export class GameUI {
     private static _instance: GameUI | undefined;
 
-    private constructor() {}
+    private constructor() { }
 
     static getInstance(): GameUI {
         if (!GameUI._instance) {
@@ -308,6 +308,33 @@ export class GameUI {
         });
 
         return squareContainer;
+    }
+
+    public restrictedAreaWarning(player: mod.Player, isActiveAccessor: SolidUI.Accessor<boolean>, timeToRedeployAccessor: SolidUI.Accessor<number>): UIContainer {
+        const livesUI = SolidUI.h(UIContainer, {
+            position: { x: 400, y: 20 },
+            size: { width: 100, height: 50 },
+            bgColor: UI.COLORS.RED,
+            bgFill: mod.UIBgFill.Solid,
+            bgAlpha: 0.5,
+            visible: isActiveAccessor,
+            depth: mod.UIDepth.AboveGameUI,
+            anchor: mod.UIAnchor.TopCenter,
+            receiver: player,
+        });
+        SolidUI.h(UIText, {
+            position: { x: 0, y: 0 },
+            anchor: mod.UIAnchor.Center,
+            message: () => mod.Message(mod.stringkeys.gameUI.lifeCount, timeToRedeployAccessor()),
+            textSize: 20,
+            width: 80,
+            visible: isActiveAccessor,
+            textColor: UI.COLORS.WHITE,
+            depth: mod.UIDepth.AboveGameUI,
+            receiver: player,
+            parent: livesUI,
+        });
+        return livesUI;
     }
 
     public teamScores(

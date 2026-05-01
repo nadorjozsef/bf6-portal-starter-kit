@@ -4,8 +4,9 @@ import type { TeamManager } from '../team/teamManager';
 import type { Team } from '../team/team';
 import type { CapturePointManager } from '../capturePoint/capturePointManager';
 import { PlayerManager } from '../player/playerManager';
-import type { Player } from '../player/player';
 import { config } from '../../config';
+import { RestrictedAreas } from '../restrictedAreas/restrictedAreas';
+import { RedeployTimer } from '../restrictedAreas/redeployTimer';
 
 export class GameUIManager {
     private static _instance: GameUIManager | undefined;
@@ -15,9 +16,10 @@ export class GameUIManager {
         private _playerManager: PlayerManager,
         private _teamManager: TeamManager,
         private _capturePointManager: CapturePointManager,
+        private _restrictedAreas: RestrictedAreas,
     ) {
         Events.OnGameModeStarted.subscribe(this.handleGameModeStarted.bind(this));
-        this._playerManager.subscribePlayerJoinGame(this.handlePlayerJoinGame.bind(this));
+        this._restrictedAreas.subscribePlayerRegistered(this.handleRestrictedAreasPlayerRegistered.bind(this));
     }
 
     static getInstance(
@@ -25,9 +27,10 @@ export class GameUIManager {
         playerManager: PlayerManager,
         teamManager: TeamManager,
         capturePointManager: CapturePointManager,
+        restrictedAreas: RestrictedAreas,
     ): GameUIManager {
         if (!GameUIManager._instance) {
-            GameUIManager._instance = new GameUIManager(gameUI, playerManager, teamManager, capturePointManager);
+            GameUIManager._instance = new GameUIManager(gameUI, playerManager, teamManager, capturePointManager, restrictedAreas);
         }
         return GameUIManager._instance;
     }
@@ -38,10 +41,6 @@ export class GameUIManager {
         this.showTeamScores(team1, team2);
         this.showTeamScoreBars(team1, team2);
         this.showCapturePoints(team1, team2);
-    }
-
-    private handlePlayerJoinGame(player: Player): void {
-
     }
 
     private showTeamScores(team1: Team, team2: Team): void {
@@ -63,5 +62,9 @@ export class GameUIManager {
 
         this._gameUI.capturePoints(team1.modObject, capturePointsData);
         this._gameUI.capturePoints(team2.modObject, capturePointsData);
+    }
+
+    private handleRestrictedAreasPlayerRegistered(modPlayer: mod.Player, redeployTimer: RedeployTimer): void {
+        this._gameUI.restrictedAreaWarning(modPlayer, redeployTimer.isActiveAccessor, redeployTimer.timeToRedeployAccessor);
     }
 }

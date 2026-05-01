@@ -1,0 +1,80 @@
+import { Events } from 'bf6-portal-utils/events/index.ts';
+import { config } from '../../config.ts';
+import { debug } from '../../debugTool/adminDebugTool.ts';
+import { RedeployTimer } from "./redeployTimer.ts";
+
+type RegisterPlayerCallback = (player: mod.Player, timer: RedeployTimer) => void;
+
+export class RestrictedAreas {
+    private static _instance: RestrictedAreas | undefined;
+    private _redeployTimers: RedeployTimer[] = [];
+    private _registerPlayerCallbacks: RegisterPlayerCallback[] = [];
+
+    private constructor() {
+        Events.OnPlayerJoinGame.subscribe(this.handlePlayerJoinGame.bind(this));
+        Events.OnPlayerLeaveGame.subscribe(this.handlePlayerLeaveGame.bind(this));
+        Events.OnPlayerEnterAreaTrigger.subscribe(this.handlePlayerEnterArea.bind(this));
+        Events.OnPlayerExitAreaTrigger.subscribe(this.handlePlayerExitArea.bind(this));
+    }
+
+    static getInstance(): RestrictedAreas {
+        if (!RestrictedAreas._instance) {
+            RestrictedAreas._instance = new RestrictedAreas();
+        }
+        return RestrictedAreas._instance;
+    }
+
+    public getTimerForPlayer(playerId: number): RedeployTimer | undefined {
+        return this._redeployTimers.find(timer => timer.playerId === playerId);
+    }
+
+    get redeployTimers(): RedeployTimer[] {
+        return this._redeployTimers;
+    }
+
+    public subscribePlayerRegistered(callback: RegisterPlayerCallback): void {
+        this._registerPlayerCallbacks.push(callback);
+    }
+
+    private handlePlayerJoinGame(modPlayer: mod.Player): void {
+        const redeployTimer = new RedeployTimer(mod.GetObjId(modPlayer));
+        this._redeployTimers.push(redeployTimer);
+        for (const callback of this._registerPlayerCallbacks) {
+            callback(modPlayer, redeployTimer);
+        }
+    }
+
+    private handlePlayerLeaveGame(playerId: number): void {
+        const redeployTimer = this._redeployTimers.find(timer => timer.playerId === playerId);
+        if (redeployTimer) {
+            redeployTimer.reset();
+            this._redeployTimers.splice(this._redeployTimers.indexOf(redeployTimer), 1);
+        }
+    }
+
+    private handlePlayerEnterArea(modPlayer: mod.Player, modAreaTrigger: mod.AreaTrigger): void {
+        if (!this.isRestrictiveAreaForPlayer(modPlayer, modAreaTrigger)) {
+            return;
+        }
+        const redeployTimer = this._redeployTimers.find(timer => timer.playerId === mod.GetObjId(modPlayer));
+        if (redeployTimer) {
+            redeployTimer.start();
+        }
+    }
+
+    private handlePlayerExitArea(modPlayer: mod.Player, modAreaTrigger: mod.AreaTrigger): void {
+        if (!this.isRestrictiveAreaForPlayer(modPlayer, modAreaTrigger)) {
+            return;
+        }
+        const redeployTimer = this._redeployTimers.find(timer => timer.playerId === mod.GetObjId(modPlayer));
+        if (redeployTimer) {
+            redeployTimer.reset();
+        }
+    }
+
+    private isRestrictiveAreaForPlayer(modPlayer: mod.Player, modAreaTrigger: mod.AreaTrigger): boolean {
+        const playerTeamId = mod.GetObjId(mod.GetTeam(modPlayer));
+        const areaTriggerId = mod.GetObjId(modAreaTrigger);
+        return config.restrictedAreas.some(restrictedArea => restrictedArea.id === areaTriggerId && restrictedArea.ownerTeamId !== playerTeamId);
+    }
+}

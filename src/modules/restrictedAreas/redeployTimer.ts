@@ -1,7 +1,6 @@
 import { Clocks } from "bf6-portal-utils/clocks";
 import { SolidUI } from "bf6-portal-utils/solid-ui/index.ts";
 import { PlayerManager } from "../player/playerManager.ts";
-import { debug } from '../../debugTool/adminDebugTool.ts';
 
 export class RedeployTimer {
     private _timeToRedeploy = SolidUI.createSignal(0);

@@ -337,6 +337,57 @@ export class GameUI {
         return livesUI;
     }
 
+    public capturePointProgress(player: mod.Player, isActiveAccessor: SolidUI.Accessor<boolean>, friendlyPlayersCountAccessor: SolidUI.Accessor<number>, enemyPlayersCountAccessor: SolidUI.Accessor<number>, progressAccessor: SolidUI.Accessor<number>): UIContainer {
+        const livesUI = SolidUI.h(UIContainer, {
+            position: { x: 400, y: 100 },
+            size: { width: 100, height: 100 },
+            bgColor: UI.COLORS.GREEN,
+            bgFill: mod.UIBgFill.Solid,
+            bgAlpha: 0.5,
+            visible: isActiveAccessor,
+            depth: mod.UIDepth.AboveGameUI,
+            anchor: mod.UIAnchor.TopCenter,
+            receiver: player,
+        });
+        SolidUI.h(UIText, {
+            position: { x: 0, y: -30 },
+            anchor: mod.UIAnchor.Center,
+            message: () => mod.Message(mod.stringkeys.gameUI.lifeCount, friendlyPlayersCountAccessor()),
+            textSize: 20,
+            width: 80,
+            visible: isActiveAccessor,
+            textColor: UI.COLORS.WHITE,
+            depth: mod.UIDepth.AboveGameUI,
+            receiver: player,
+            parent: livesUI,
+        });
+        SolidUI.h(UIText, {
+            position: { x: 0, y: 30 },
+            anchor: mod.UIAnchor.Center,
+            message: () => mod.Message(mod.stringkeys.gameUI.lifeCount, enemyPlayersCountAccessor()),
+            textSize: 20,
+            width: 80,
+            visible: isActiveAccessor,
+            textColor: UI.COLORS.WHITE,
+            depth: mod.UIDepth.AboveGameUI,
+            receiver: player,
+            parent: livesUI,
+        });
+        SolidUI.h(UIText, {
+            position: { x: 0, y: 60 },
+            anchor: mod.UIAnchor.Center,
+            message: () => mod.Message(mod.stringkeys.gameUI.lifeCount, progressAccessor()),
+            textSize: 20,
+            width: 80,
+            visible: isActiveAccessor,
+            textColor: UI.COLORS.WHITE,
+            depth: mod.UIDepth.AboveGameUI,
+            receiver: player,
+            parent: livesUI,
+        });
+        return livesUI;
+    }
+
     public teamScores(
         modTeam: mod.Team,
         teamScoreAccessor: SolidUI.Accessor<number>,

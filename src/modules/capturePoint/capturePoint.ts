@@ -3,8 +3,9 @@ import { SolidUI } from 'bf6-portal-utils/solid-ui';
 export class CapturePoint {
     private _ownerTeamId = SolidUI.createSignal(0);
     private _isCapturing = SolidUI.createSignal(false);
+    private _playersOnPoint: mod.Player[] = [];
 
-    constructor(private _modCapturePoint: mod.CapturePoint) {}
+    constructor(private _modCapturePoint: mod.CapturePoint) { }
 
     get id(): number {
         return mod.GetObjId(this._modCapturePoint);
@@ -12,6 +13,24 @@ export class CapturePoint {
 
     get modObject(): mod.CapturePoint {
         return this._modCapturePoint;
+    }
+
+    get playersOnPoint(): mod.Player[] {
+        return this._playersOnPoint;
+    }
+
+    public playerEntered(modPlayer: mod.Player): void {
+        if (!this._playersOnPoint.includes(modPlayer)) {
+            this._playersOnPoint.push(modPlayer);
+        }
+    }
+
+    public playerExited(modPlayer: mod.Player): void {
+        const playerId = mod.GetObjId(modPlayer);
+        const index = this._playersOnPoint.findIndex(player => mod.GetObjId(player) === playerId);
+        if (index !== -1) {
+            this._playersOnPoint.splice(index, 1);
+        }
     }
 
     get ownerTeamIdAccessor(): SolidUI.Accessor<number> {

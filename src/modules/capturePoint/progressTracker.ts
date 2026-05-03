@@ -11,7 +11,7 @@ export class ProgressTracker {
 
     constructor(private _modPlayer: mod.Player) { }
 
-    public update(capturePoint: CapturePoint) {
+    public playerEntered(capturePoint: CapturePoint) {
         const playersOnPoint = capturePoint.playersOnPoint;
         const playerTeamId = mod.GetObjId(mod.GetTeam(this._modPlayer));
         const friendlyPlayersCount = playersOnPoint.filter(player => mod.GetObjId(mod.GetTeam(player)) === playerTeamId).length;
@@ -20,9 +20,7 @@ export class ProgressTracker {
         this._intervalId = Timers.setInterval(
             () => {
                 this._progress[1](mod.GetCaptureProgress(capturePoint.modObject));
-            },
-            50,
-            true
+            }, 50, true
         );
 
         this._friendlyPlayersCount[1](friendlyPlayersCount);
@@ -30,7 +28,7 @@ export class ProgressTracker {
         this._isActive[1](true);
     }
 
-    public stop() {
+    public playerExited() {
         this._isActive[1](false);
         this._friendlyPlayersCount[1](0);
         this._enemyPlayersCount[1](0);

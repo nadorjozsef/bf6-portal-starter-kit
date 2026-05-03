@@ -23,15 +23,7 @@ export class RestrictedAreaManager {
         return RestrictedAreaManager._instance;
     }
 
-    public getTimerForPlayer(playerId: number): RedeployTimer | undefined {
-        return this._redeployTimers.find(timer => timer.playerId === playerId);
-    }
-
-    get redeployTimers(): RedeployTimer[] {
-        return this._redeployTimers;
-    }
-
-    public subscribePlayerRegistered(callback: RegisterPlayerCallback): void {
+    public subscribePlayerRegistered(callback: (player: mod.Player, timer: RedeployTimer) => void): void {
         this._registerPlayerCallbacks.push(callback);
     }
 

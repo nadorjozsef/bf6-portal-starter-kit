@@ -17,10 +17,10 @@ export class GameUIManager {
         private _playerManager: PlayerManager,
         private _teamManager: TeamManager,
         private _capturePointManager: CapturePointManager,
-        private _restrictedAreas: RestrictedAreaManager,
+        private _restrictedAreaManager: RestrictedAreaManager,
     ) {
         Events.OnGameModeStarted.subscribe(this.handleGameModeStarted.bind(this));
-        this._restrictedAreas.subscribePlayerRegistered(this.handleRestrictedAreasPlayerRegistered.bind(this));
+        this._restrictedAreaManager.subscribePlayerRegistered(this.handleRestrictedAreasPlayerRegistered.bind(this));
         this._capturePointManager.subscribePlayerRegistered(this.handleCapturePointManagerPlayerRegistered.bind(this));
     }
 

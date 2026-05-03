@@ -26,8 +26,7 @@ export class ScoreboardManager {
             this._scoreboard.update(
                 player.modObject,
                 player.scoreAccessor(),
-                player.killsAccessor(),
-                player.livesAccessor()
+                player.killsAccessor()
             );
         });
         this.initialize(player);
@@ -35,7 +34,7 @@ export class ScoreboardManager {
 
     private initialize(player: Player): void {
         for (let seconds = 0; seconds <= 5; seconds++) {
-            Timers.setTimeout(() => this._scoreboard.update(player.modObject, 0, 0, 0), seconds * 1000);
+            Timers.setTimeout(() => this._scoreboard.update(player.modObject, 0, 0), seconds * 1000);
         }
     }
 }

@@ -26,8 +26,7 @@ export class CapturePoint {
     }
 
     public playerExited(modPlayer: mod.Player): void {
-        const playerId = mod.GetObjId(modPlayer);
-        const index = this._playersOnPoint.findIndex(player => mod.GetObjId(player) === playerId);
+        const index = this._playersOnPoint.findIndex(player => mod.GetObjId(player) === mod.GetObjId(modPlayer));
         if (index !== -1) {
             this._playersOnPoint.splice(index, 1);
         }

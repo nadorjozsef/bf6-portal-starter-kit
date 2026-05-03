@@ -1,8 +1,5 @@
 {
     "gameUI": {
-        "lifeCount": "Life: {}",
-        "reinforcementsLabel": "Reinforcements",
-        "reinforcementsTime": "{}",
         "leftActivePlayersText": "{}",
         "activePlayersTextCenter": "vs",
         "rightActivePlayersText": "{}",

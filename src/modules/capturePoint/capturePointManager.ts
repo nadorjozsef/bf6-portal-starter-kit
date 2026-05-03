@@ -99,7 +99,6 @@ export class CapturePointManager {
     private handlePlayerEnterCapturePoint(modPlayer: mod.Player, modCapturePoint: mod.CapturePoint): void {
         const capturePoint = this.getCapturePoint(modCapturePoint);
         capturePoint.playerEntered(modPlayer);
-
         const progressTracker = this._progressTracker.find(progressTracker => progressTracker.playerId === mod.GetObjId(modPlayer));
         progressTracker?.playerEntered(capturePoint);
     }
@@ -107,7 +106,6 @@ export class CapturePointManager {
     private handlePlayerExitCapturePoint(modPlayer: mod.Player, modCapturePoint: mod.CapturePoint): void {
         const capturePoint = this.getCapturePoint(modCapturePoint);
         capturePoint.playerExited(modPlayer);
-
         const progressTracker = this._progressTracker.find(progressTracker => progressTracker.playerId === mod.GetObjId(modPlayer));
         progressTracker?.playerExited();
     }

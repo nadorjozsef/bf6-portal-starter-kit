@@ -1,6 +1,7 @@
 import { Events } from 'bf6-portal-utils/events/index.ts';
 import { config } from '../../config.ts';
 import { RedeployTimer } from "./redeployTimer.ts";
+import type { PlayerManager } from '../player/playerManager.ts';
 
 type RegisterPlayerCallback = (player: mod.Player, timer: RedeployTimer) => void;
 
@@ -9,16 +10,16 @@ export class RestrictedAreaManager {
     private _redeployTimers: RedeployTimer[] = [];
     private _registerPlayerCallbacks: RegisterPlayerCallback[] = [];
 
-    private constructor() {
+    private constructor(private _playerManager: PlayerManager) {
         Events.OnPlayerJoinGame.subscribe(this.handlePlayerJoinGame.bind(this));
         Events.OnPlayerLeaveGame.subscribe(this.handlePlayerLeaveGame.bind(this));
         Events.OnPlayerEnterAreaTrigger.subscribe(this.handlePlayerEnterArea.bind(this));
         Events.OnPlayerExitAreaTrigger.subscribe(this.handlePlayerExitArea.bind(this));
     }
 
-    static getInstance(): RestrictedAreaManager {
+    static getInstance(playerManager: PlayerManager): RestrictedAreaManager {
         if (!RestrictedAreaManager._instance) {
-            RestrictedAreaManager._instance = new RestrictedAreaManager();
+            RestrictedAreaManager._instance = new RestrictedAreaManager(playerManager);
         }
         return RestrictedAreaManager._instance;
     }
@@ -28,7 +29,7 @@ export class RestrictedAreaManager {
     }
 
     private handlePlayerJoinGame(modPlayer: mod.Player): void {
-        const redeployTimer = new RedeployTimer(mod.GetObjId(modPlayer));
+        const redeployTimer = new RedeployTimer(this._playerManager.getPlayer(modPlayer));
         this._redeployTimers.push(redeployTimer);
         for (const callback of this._registerPlayerCallbacks) {
             callback(modPlayer, redeployTimer);

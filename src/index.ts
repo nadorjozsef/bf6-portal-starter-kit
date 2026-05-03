@@ -11,10 +11,10 @@ import { debug } from './debugTool/adminDebugTool.ts';
 
 const gameUI = GameUI.getInstance();
 const playerManager = PlayerManager.getInstance();
-const scoreboard = Scoreboard.getInstance();
 const teamManager = TeamManager.getInstance();
 const capturePointManager = CapturePointManager.getInstance();
-const gameModeManager = GameMode.GetInstance(playerManager, teamManager);
-const restrictedAreas = RestrictedAreaManager.getInstance();
-GameUIManager.getInstance(gameUI, playerManager, teamManager, capturePointManager, restrictedAreas);
+GameMode.GetInstance(playerManager, teamManager);
+const restrictedAreas = RestrictedAreaManager.getInstance(playerManager);
+GameUIManager.getInstance(gameUI, teamManager, capturePointManager, restrictedAreas);
+const scoreboard = Scoreboard.getInstance();
 ScoreboardManager.getInstance(scoreboard, playerManager);

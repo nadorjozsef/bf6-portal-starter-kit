@@ -1,6 +1,6 @@
 import { Events } from 'bf6-portal-utils/events';
 import { Team } from '../team/team';
-import { config, type Config } from '../../config';
+import { config } from '../../config';
 
 export class TeamManager {
     private static _instance: TeamManager | undefined;

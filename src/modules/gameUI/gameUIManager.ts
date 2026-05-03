@@ -3,7 +3,6 @@ import type { GameUI } from '../gameUI/gameUI';
 import type { TeamManager } from '../team/teamManager';
 import type { Team } from '../team/team';
 import type { CapturePointManager } from '../capturePoint/capturePointManager';
-import { PlayerManager } from '../player/playerManager';
 import { config } from '../../config';
 import { RestrictedAreaManager } from '../restrictedAreas/restrictedAreaManager';
 import { RedeployTimer } from '../restrictedAreas/redeployTimer';
@@ -14,7 +13,6 @@ export class GameUIManager {
 
     private constructor(
         private _gameUI: GameUI,
-        private _playerManager: PlayerManager,
         private _teamManager: TeamManager,
         private _capturePointManager: CapturePointManager,
         private _restrictedAreaManager: RestrictedAreaManager,
@@ -26,13 +24,12 @@ export class GameUIManager {
 
     static getInstance(
         gameUI: GameUI,
-        playerManager: PlayerManager,
         teamManager: TeamManager,
         capturePointManager: CapturePointManager,
         restrictedAreas: RestrictedAreaManager,
     ): GameUIManager {
         if (!GameUIManager._instance) {
-            GameUIManager._instance = new GameUIManager(gameUI, playerManager, teamManager, capturePointManager, restrictedAreas);
+            GameUIManager._instance = new GameUIManager(gameUI, teamManager, capturePointManager, restrictedAreas);
         }
         return GameUIManager._instance;
     }

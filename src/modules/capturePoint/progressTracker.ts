@@ -17,12 +17,9 @@ export class ProgressTracker {
         const friendlyPlayersCount = playersOnPoint.filter(player => mod.GetObjId(mod.GetTeam(player)) === playerTeamId).length;
         const enemyPlayersCount = playersOnPoint.length - friendlyPlayersCount;
 
-        this._intervalId = Timers.setInterval(
-            () => {
-                this._progress[1](mod.GetCaptureProgress(capturePoint.modObject));
-            }, 50, true
-        );
-
+        this._intervalId = Timers.setInterval(() => {
+            this._progress[1](mod.GetCaptureProgress(capturePoint.modObject));
+        }, 50, true);
         this._friendlyPlayersCount[1](friendlyPlayersCount);
         this._enemyPlayersCount[1](enemyPlayersCount);
         this._isActive[1](true);

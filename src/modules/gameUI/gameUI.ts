@@ -325,7 +325,7 @@ export class GameUI {
         SolidUI.h(UIText, {
             position: { x: 0, y: 0 },
             anchor: mod.UIAnchor.Center,
-            message: () => mod.Message(mod.stringkeys.gameUI.lifeCount, timeToRedeployAccessor()),
+            message: () => mod.Message(mod.stringkeys.gameUI.teamScore, timeToRedeployAccessor()),
             textSize: 20,
             width: 80,
             visible: isActiveAccessor,
@@ -337,7 +337,12 @@ export class GameUI {
         return livesUI;
     }
 
-    public capturePointProgress(player: mod.Player, isActiveAccessor: SolidUI.Accessor<boolean>, friendlyPlayersCountAccessor: SolidUI.Accessor<number>, enemyPlayersCountAccessor: SolidUI.Accessor<number>, progressAccessor: SolidUI.Accessor<number>): UIContainer {
+    public capturePointProgress(
+        player: mod.Player,
+        isActiveAccessor: SolidUI.Accessor<boolean>,
+        friendlyPlayersCountAccessor: SolidUI.Accessor<number>,
+        enemyPlayersCountAccessor: SolidUI.Accessor<number>,
+        progressAccessor: SolidUI.Accessor<number>): UIContainer {
         const livesUI = SolidUI.h(UIContainer, {
             position: { x: 400, y: 100 },
             size: { width: 100, height: 100 },
@@ -352,7 +357,7 @@ export class GameUI {
         SolidUI.h(UIText, {
             position: { x: 0, y: -30 },
             anchor: mod.UIAnchor.Center,
-            message: () => mod.Message(mod.stringkeys.gameUI.lifeCount, friendlyPlayersCountAccessor()),
+            message: () => mod.Message(mod.stringkeys.gameUI.teamScore, friendlyPlayersCountAccessor()),
             textSize: 20,
             width: 80,
             visible: isActiveAccessor,
@@ -364,7 +369,7 @@ export class GameUI {
         SolidUI.h(UIText, {
             position: { x: 0, y: 30 },
             anchor: mod.UIAnchor.Center,
-            message: () => mod.Message(mod.stringkeys.gameUI.lifeCount, enemyPlayersCountAccessor()),
+            message: () => mod.Message(mod.stringkeys.gameUI.teamScore, enemyPlayersCountAccessor()),
             textSize: 20,
             width: 80,
             visible: isActiveAccessor,
@@ -376,7 +381,7 @@ export class GameUI {
         SolidUI.h(UIText, {
             position: { x: 0, y: 60 },
             anchor: mod.UIAnchor.Center,
-            message: () => mod.Message(mod.stringkeys.gameUI.lifeCount, progressAccessor()),
+            message: () => mod.Message(mod.stringkeys.gameUI.teamScore, progressAccessor()),
             textSize: 20,
             width: 80,
             visible: isActiveAccessor,
@@ -529,143 +534,5 @@ export class GameUI {
         });
 
         return container;
-    }
-
-    public activePlayers(
-        team: mod.Team,
-        leftActivePlayerAccessor: SolidUI.Accessor<number>,
-        rightActivePlayerAccessor: SolidUI.Accessor<number>
-    ): UIContainer {
-        const playerCountContainer = SolidUI.h(UIContainer, {
-            position: { x: 0, y: 130 },
-            size: { width: 150, height: 50 },
-            anchor: mod.UIAnchor.TopCenter,
-            bgColor: mod.CreateVector(0.2, 0.2, 0.2),
-            visible: true,
-            depth: mod.UIDepth.AboveGameUI,
-            bgAlpha: 0,
-            bgFill: mod.UIBgFill.None,
-            receiver: team,
-        });
-
-        SolidUI.h(UIText, {
-            position: { x: 0, y: 0 },
-            size: { width: 50, height: 50 },
-            anchor: mod.UIAnchor.CenterLeft,
-            bgColor: mod.CreateVector(0.2, 0.2, 0.2),
-            bgAlpha: 1,
-            visible: true,
-            bgFill: mod.UIBgFill.None,
-            message: () => mod.Message(mod.stringkeys.gameUI.rightActivePlayersText, leftActivePlayerAccessor()),
-            depth: mod.UIDepth.AboveGameUI,
-            textColor: mod.CreateVector(0.4392, 0.9216, 1),
-            textSize: 28,
-            textAnchor: mod.UIAnchor.Center,
-            parent: playerCountContainer,
-            receiver: team,
-        });
-
-        SolidUI.h(UIText, {
-            position: { x: 0, y: 0 },
-            size: { width: 50, height: 50 },
-            anchor: mod.UIAnchor.CenterRight,
-            bgColor: mod.CreateVector(0.2, 0.2, 0.2),
-            bgAlpha: 1,
-            visible: true,
-            bgFill: mod.UIBgFill.None,
-            message: () => mod.Message(mod.stringkeys.gameUI.leftActivePlayersText, rightActivePlayerAccessor()),
-            depth: mod.UIDepth.AboveGameUI,
-            textColor: mod.CreateVector(1, 0.5137, 0.3804),
-            textSize: 28,
-            textAnchor: mod.UIAnchor.Center,
-            parent: playerCountContainer,
-            receiver: team,
-        });
-
-        SolidUI.h(UIText, {
-            position: { x: 0, y: 0 },
-            size: { width: 50, height: 50 },
-            anchor: mod.UIAnchor.Center,
-            visible: true,
-            padding: 0,
-            bgColor: mod.CreateVector(0.2, 0.2, 0.2),
-            bgAlpha: 1,
-            bgFill: mod.UIBgFill.None,
-            message: mod.Message(mod.stringkeys.gameUI.activePlayersTextCenter),
-            depth: mod.UIDepth.AboveGameUI,
-            textColor: mod.CreateVector(1, 1, 1),
-            textSize: 28,
-            textAnchor: mod.UIAnchor.Center,
-            parent: playerCountContainer,
-        });
-
-        return playerCountContainer;
-    }
-
-    public playerLives(player: mod.Player, livesAccessor: SolidUI.Accessor<number>): UIContainer {
-        const livesUI = SolidUI.h(UIContainer, {
-            position: { x: 400, y: 20 },
-            size: { width: 100, height: 50 },
-            bgColor: UI.COLORS.BLACK,
-            bgFill: mod.UIBgFill.Solid,
-            bgAlpha: 0.75,
-            visible: true,
-            depth: mod.UIDepth.AboveGameUI,
-            anchor: mod.UIAnchor.TopCenter,
-            receiver: player,
-        });
-        SolidUI.h(UIText, {
-            message: () => mod.Message(mod.stringkeys.gameUI.lifeCount, livesAccessor()),
-            textSize: 20,
-            width: 80,
-            visible: true,
-            textColor: UI.COLORS.WHITE,
-            depth: mod.UIDepth.AboveGameUI,
-            receiver: player,
-            parent: livesUI,
-        });
-        return livesUI;
-    }
-
-    public nextReinforcements(team: mod.Team, nextReinforcementsTimeAccessor: SolidUI.Accessor<number>): UIContainer {
-        const reinforcementsTimerContainer = SolidUI.h(UIContainer, {
-            position: { x: 550, y: 20 },
-            size: { width: 100, height: 50 },
-            anchor: mod.UIAnchor.TopCenter,
-            visible: true,
-            depth: mod.UIDepth.AboveGameUI,
-            bgColor: UI.COLORS.BLACK,
-            bgAlpha: 0.75,
-            bgFill: mod.UIBgFill.Solid,
-            receiver: team,
-        });
-
-        SolidUI.h(UIText, {
-            position: { x: 0, y: 0 },
-            size: { width: 100, height: 34 },
-            anchor: mod.UIAnchor.BottomCenter,
-            visible: true,
-            message: () => mod.Message(mod.stringkeys.gameUI.reinforcementsTime, nextReinforcementsTimeAccessor()),
-            depth: mod.UIDepth.AboveGameUI,
-            textColor: mod.CreateVector(1, 1, 1),
-            textSize: 28,
-            textAnchor: mod.UIAnchor.Center,
-            parent: reinforcementsTimerContainer,
-        });
-
-        SolidUI.h(UIText, {
-            position: { x: 0, y: 0 },
-            size: { width: 100, height: 20 },
-            anchor: mod.UIAnchor.TopCenter,
-            visible: true,
-            message: mod.Message(mod.stringkeys.gameUI.reinforcementsLabel),
-            depth: mod.UIDepth.AboveGameUI,
-            textColor: UI.COLORS.WHITE,
-            textSize: 12,
-            textAnchor: mod.UIAnchor.Center,
-            parent: reinforcementsTimerContainer,
-        });
-
-        return reinforcementsTimerContainer;
     }
 }

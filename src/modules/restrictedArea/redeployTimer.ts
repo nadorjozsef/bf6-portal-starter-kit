@@ -1,6 +1,8 @@
 import { Clocks } from "bf6-portal-utils/clocks";
 import { SolidUI } from "bf6-portal-utils/solid-ui/index.ts";
 import type { Player } from "../player/player.ts";
+import { Sounds } from 'bf6-portal-utils/sounds';
+import { debug } from "../../debugTool/adminDebugTool.ts";
 
 export class RedeployTimer {
     private _timeToRedeploy = SolidUI.createSignal(0);
@@ -23,6 +25,7 @@ export class RedeployTimer {
     public start() {
         this._redeployClock.start();
         this._isActive[1](true);
+        this.playSound();
     }
 
     public reset() {
@@ -36,11 +39,22 @@ export class RedeployTimer {
     });
 
     private onSecond(seconds: number): void {
+        debug?.dynamicLog(`Player ${this._player.id} has ${seconds} seconds to redeploy`);
         this._timeToRedeploy[1](seconds);
+        if (seconds < 10) {
+            this.playSound();
+        }
     }
 
     private onComplete(): void {
         this._isActive[1](false);
         this._player.kill();
+    }
+
+    private playSound() {
+        Sounds.Sound2D.play(mod.RuntimeSpawn_Common.SFX_UI_Gamemode_Shared_OutOfBounds_Countdown_OneShot2D, {
+            amplitude: 0.7,
+            target: this._player.modObject,
+        });
     }
 }

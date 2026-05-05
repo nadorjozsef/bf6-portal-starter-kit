@@ -11,6 +11,8 @@
         "capturePointE": "E",
         "capturePointF": "F",
         "capturePointG": "G",
-        "circle": "\u25cf"
+        "circle": "\u25cf",
+        "returnToCombatArea": "RETURN TO COMBAT AREA",
+        "timeToRedeploy": "{}"
     }
 }

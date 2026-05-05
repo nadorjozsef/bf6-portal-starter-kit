@@ -4,8 +4,8 @@ import type { TeamManager } from '../team/teamManager';
 import type { Team } from '../team/team';
 import type { CapturePointManager } from '../capturePoint/capturePointManager';
 import { config } from '../../config';
-import { RestrictedAreaManager } from '../restrictedAreas/restrictedAreaManager';
-import { RedeployTimer } from '../restrictedAreas/redeployTimer';
+import { RestrictedAreaManager } from '../restrictedArea/restrictedAreaManager';
+import { RedeployTimer } from '../restrictedArea/redeployTimer';
 import type { ProgressTracker } from '../capturePoint/progressTracker';
 
 export class GameUIManager {
@@ -18,7 +18,7 @@ export class GameUIManager {
         private _restrictedAreaManager: RestrictedAreaManager,
     ) {
         Events.OnGameModeStarted.subscribe(this.handleGameModeStarted.bind(this));
-        this._restrictedAreaManager.subscribePlayerRegistered(this.handleRestrictedAreasPlayerRegistered.bind(this));
+        this._restrictedAreaManager.subscribePlayerRegistered(this.handleRestrictedAreaPlayerRegistered.bind(this));
         this._capturePointManager.subscribePlayerRegistered(this.handleCapturePointManagerPlayerRegistered.bind(this));
     }
 
@@ -63,7 +63,7 @@ export class GameUIManager {
         this._gameUI.capturePoints(team2.modObject, capturePointsData);
     }
 
-    private handleRestrictedAreasPlayerRegistered(modPlayer: mod.Player, redeployTimer: RedeployTimer): void {
+    private handleRestrictedAreaPlayerRegistered(modPlayer: mod.Player, redeployTimer: RedeployTimer): void {
         this._gameUI.restrictedAreaWarning(modPlayer, redeployTimer.isActiveAccessor, redeployTimer.timeToRedeployAccessor);
     }
 

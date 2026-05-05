@@ -6,7 +6,7 @@ import { Scoreboard } from './modules/scoreboard/scoreboard.ts';
 import { CapturePointManager } from './modules/capturePoint/capturePointManager.ts';
 import { GameUIManager } from './modules/gameUI/gameUIManager.ts';
 import { ScoreboardManager } from './modules/scoreboard/scoreboardManager.ts';
-import { RestrictedAreaManager } from './modules/restrictedAreas/restrictedAreaManager.ts';
+import { RestrictedAreaManager } from './modules/restrictedArea/restrictedAreaManager.ts';
 import { debug } from './debugTool/adminDebugTool.ts';
 
 const gameUI = GameUI.getInstance();

@@ -3,13 +3,13 @@ import { CapturePoint } from './capturePoint';
 import { convertArray } from '../../helpers';
 import { ProgressTracker } from './progressTracker';
 
-type RegisterPlayerCallback_2 = (player: mod.Player, progressTracker: ProgressTracker) => void;
+type RegisterPlayerCallback = (player: mod.Player, progressTracker: ProgressTracker) => void;
 
 export class CapturePointManager {
     private static _instance: CapturePointManager | undefined;
     private _capturePoints: CapturePoint[] = [];
     private _progressTracker: ProgressTracker[] = [];
-    private _registerPlayerCallbacks: RegisterPlayerCallback_2[] = [];
+    private _registerPlayerCallbacks: RegisterPlayerCallback[] = [];
 
     private constructor() {
         Events.OnGameModeStarted.subscribe(this.handleGameModeStarted.bind(this));
@@ -29,10 +29,9 @@ export class CapturePointManager {
         return CapturePointManager._instance;
     }
 
-    public subscribePlayerRegistered(callback: RegisterPlayerCallback_2): void {
+    public subscribePlayerRegistered(callback: RegisterPlayerCallback): void {
         this._registerPlayerCallbacks.push(callback);
     }
-
 
     public getCapturePoints(): CapturePoint[] {
         return this._capturePoints;

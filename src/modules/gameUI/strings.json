@@ -13,6 +13,8 @@
         "capturePointG": "G",
         "circle": "\u25cf",
         "returnToCombatArea": "RETURN TO COMBAT AREA",
-        "timeToRedeploy": "{}"
+        "timeToRedeploy": "{}",
+        "friendlyPlayersText": "{}",
+        "enemyPlayersText": "{}"
     }
 }

@@ -68,6 +68,6 @@ export class GameUIManager {
     }
 
     private handleCapturePointManagerPlayerRegistered(modPlayer: mod.Player, progressTracker: ProgressTracker): void {
-        this._gameUI.capturePointProgress(modPlayer, progressTracker.isActiveAccessor, progressTracker.friendlyPlayersCountAccessor, progressTracker.enemyPlayersCountAccessor, progressTracker.progressAccessor);
+        this._gameUI.bigBlueCapturePoint(modPlayer, progressTracker.isActiveAccessor, progressTracker.friendlyPlayersCountAccessor, progressTracker.enemyPlayersCountAccessor, progressTracker.progressAccessor);
     }
 }

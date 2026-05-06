@@ -55,6 +55,7 @@ export class GameUIManager {
 
     private showCapturePoints(team1: Team, team2: Team): void {
         const capturePointsData = this._capturePointManager.getCapturePoints().map((capturePoint) => ({
+            letter: capturePoint.letter,
             ownerTeamIdAccessor: capturePoint.ownerTeamIdAccessor,
             isCapturingAccessor: capturePoint.isCapturingAccessor,
         }));
@@ -68,6 +69,6 @@ export class GameUIManager {
     }
 
     private handleCapturePointManagerPlayerRegistered(modPlayer: mod.Player, progressTracker: ProgressTracker): void {
-        this._gameUI.bigBlueCapturePoint(modPlayer, progressTracker.isActiveAccessor, progressTracker.friendlyPlayersCountAccessor, progressTracker.enemyPlayersCountAccessor, progressTracker.progressAccessor);
+        this._gameUI.flagCaptureProgress(modPlayer, progressTracker.letterAccessor, progressTracker.isActiveAccessor, progressTracker.friendlyPlayersCountAccessor, progressTracker.enemyPlayersCountAccessor, progressTracker.progressAccessor, progressTracker.currentOwnerTeamIdAccessor);
     }
 }

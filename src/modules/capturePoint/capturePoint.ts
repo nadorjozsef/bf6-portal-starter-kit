@@ -5,10 +5,14 @@ export class CapturePoint {
     private _isCapturing = SolidUI.createSignal(false);
     private _playersOnPoint: mod.Player[] = [];
 
-    constructor(private _modCapturePoint: mod.CapturePoint) { }
+    constructor(private _modCapturePoint: mod.CapturePoint, private _letter: string) { }
 
     get id(): number {
         return mod.GetObjId(this._modCapturePoint);
+    }
+
+    get letter(): string {
+        return this._letter;
     }
 
     get modObject(): mod.CapturePoint {

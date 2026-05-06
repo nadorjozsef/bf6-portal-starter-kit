@@ -15,7 +15,7 @@ function createAdminDebugTool(player: mod.Player): void {
             visible: false,
         },
         dynamicLogger: {
-            visible: false,
+            visible: true,
         },
         debugMenu: {
             visible: false,
@@ -26,7 +26,8 @@ function createAdminDebugTool(player: mod.Player): void {
 
     // Create a multi-click detector to open the debug menu when the player triple-clicks the interact key.
     new MultiClickDetector(player, () => {
-        debug?.showDebugMenu();
+        // debug?.showDebugMenu();
+        mod.SwitchTeams(mod.GetTeam(1), mod.GetTeam(2));
     });
 
     // Log a message to the static logger.

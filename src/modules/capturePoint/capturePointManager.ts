@@ -15,8 +15,8 @@ export class CapturePointManager {
         Events.OnGameModeStarted.subscribe(this.handleGameModeStarted.bind(this));
         Events.OnPlayerJoinGame.subscribe(this.handlePlayerJoinGame.bind(this));
         Events.OnPlayerLeaveGame.subscribe(this.handlePlayerLeaveGame.bind(this));
-        Events.OnCapturePointCaptured.subscribe(this.handleCapturePointCaptured.bind(this));
         Events.OnCapturePointCapturing.subscribe(this.handleCapturePointCapturing.bind(this));
+        Events.OnCapturePointCaptured.subscribe(this.handleCapturePointCaptured.bind(this));
         Events.OnCapturePointLost.subscribe(this.handleCapturePointLost.bind(this));
         Events.OnPlayerEnterCapturePoint.subscribe(this.handlePlayerEnterCapturePoint.bind(this));
         Events.OnPlayerExitCapturePoint.subscribe(this.handlePlayerExitCapturePoint.bind(this));
@@ -56,8 +56,9 @@ export class CapturePointManager {
 
     private handleGameModeStarted(): void {
         const modCapturePoints = convertArray<mod.CapturePoint>(mod.AllCapturePoints());
-        for (const modCapturePoint of modCapturePoints) {
-            this._capturePoints.push(new CapturePoint(modCapturePoint));
+        const letters = ["A", "B", "C", "D", "E", "F", "G"];
+        for (const [index, modCapturePoint] of modCapturePoints.entries()) {
+            this._capturePoints.push(new CapturePoint(modCapturePoint, letters[index]));
         }
         for (const capturePoint of this._capturePoints) {
             mod.EnableGameModeObjective(capturePoint.modObject, true);
@@ -87,6 +88,8 @@ export class CapturePointManager {
     private handleCapturePointCapturing(modCapturePoint: mod.CapturePoint): void {
         const capturePoint = this.getCapturePoint(modCapturePoint);
         capturePoint.isCapturing = true;
+        // debug?.dynamicLog('GetCurrentOwnerTeam: ' + mod.GetObjId(mod.GetCurrentOwnerTeam(modCapturePoint)));
+        // debug?.dynamicLog('GetOwnerProgressTeam: ' + mod.GetObjId(mod.GetOwnerProgressTeam(modCapturePoint)));
     }
 
     private handleCapturePointCaptured(modCapturePoint: mod.CapturePoint): void {

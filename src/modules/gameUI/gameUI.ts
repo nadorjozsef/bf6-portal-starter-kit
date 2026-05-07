@@ -237,6 +237,19 @@ export class GameUI {
             parent: mainContainer,
             receiver: modPlayer,
         });
+        SolidUI.h(UIContainer, {
+            position: { x: 0, y: 2 },
+            height: () => 48 * progressAccessor(),
+            width: 46,
+            bgColor: UI.COLORS.BF_BLUE_BRIGHT,
+            bgFill: mod.UIBgFill.Solid,
+            bgAlpha: 0.5,
+            visible: () => isActiveAccessor() && progressAccessor() < 1 && (currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) || currentOwnerTeamIdAccessor() === 0),
+            depth: mod.UIDepth.AboveGameUI,
+            anchor: mod.UIAnchor.BottomCenter,
+            parent: mainContainer,
+            receiver: modPlayer,
+        });
         // letter
         SolidUI.h(UIText, {
             message: () => mod.Message(getStringKeyForLetter(letterAccessor())),
@@ -288,6 +301,19 @@ export class GameUI {
             visible: () => isActiveAccessor() && progressAccessor() < 1 && (currentOwnerTeamIdAccessor() !== mod.GetObjId(mod.GetTeam(modPlayer)) && currentOwnerTeamIdAccessor() !== 0),
             depth: mod.UIDepth.AboveGameUI,
             anchor: mod.UIAnchor.Center,
+            parent: mainContainer,
+            receiver: modPlayer,
+        });
+        SolidUI.h(UIContainer, {
+            position: { x: 0, y: 2 },
+            height: () => 48 * (1 - progressAccessor()),
+            width: 46,
+            bgColor: UI.COLORS.BF_RED_DARK,
+            bgFill: mod.UIBgFill.Solid,
+            bgAlpha: 0.5,
+            visible: () => isActiveAccessor() && progressAccessor() < 1 && (currentOwnerTeamIdAccessor() !== mod.GetObjId(mod.GetTeam(modPlayer)) && currentOwnerTeamIdAccessor() !== 0),
+            depth: mod.UIDepth.AboveGameUI,
+            anchor: mod.UIAnchor.TopCenter,
             parent: mainContainer,
             receiver: modPlayer,
         });

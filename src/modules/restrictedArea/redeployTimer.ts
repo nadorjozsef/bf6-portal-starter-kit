@@ -2,7 +2,6 @@ import { Clocks } from "bf6-portal-utils/clocks";
 import { SolidUI } from "bf6-portal-utils/solid-ui/index.ts";
 import type { Player } from "../player/player.ts";
 import { Sounds } from 'bf6-portal-utils/sounds';
-import { debug } from "../../debugTool/adminDebugTool.ts";
 
 export class RedeployTimer {
     private _timeToRedeploy = SolidUI.createSignal(0);
@@ -39,7 +38,6 @@ export class RedeployTimer {
     });
 
     private onSecond(seconds: number): void {
-        debug?.dynamicLog(`Player ${this._player.id} has ${seconds} seconds to redeploy`);
         this._timeToRedeploy[1](seconds);
         if (seconds < 10) {
             this.playSound();

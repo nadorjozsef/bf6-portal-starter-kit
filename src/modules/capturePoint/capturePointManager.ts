@@ -88,8 +88,6 @@ export class CapturePointManager {
     private handleCapturePointCapturing(modCapturePoint: mod.CapturePoint): void {
         const capturePoint = this.getCapturePoint(modCapturePoint);
         capturePoint.isCapturing = true;
-        // debug?.dynamicLog('GetCurrentOwnerTeam: ' + mod.GetObjId(mod.GetCurrentOwnerTeam(modCapturePoint)));
-        // debug?.dynamicLog('GetOwnerProgressTeam: ' + mod.GetObjId(mod.GetOwnerProgressTeam(modCapturePoint)));
     }
 
     private handleCapturePointCaptured(modCapturePoint: mod.CapturePoint): void {
@@ -110,6 +108,9 @@ export class CapturePointManager {
         capturePoint.playerExited(modPlayer);
         const progressTracker = this._progressTracker.find(progressTracker => progressTracker.playerId === mod.GetObjId(modPlayer));
         progressTracker?.playerExited();
+        if (capturePoint.playersOnPoint.length === 0) {
+            capturePoint.isCapturing = false;
+        }
     }
 
     private handleCapturePointLost(modCapturePoint: mod.CapturePoint): void {

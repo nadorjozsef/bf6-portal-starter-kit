@@ -14,8 +14,8 @@ export class Scoreboard {
         return Scoreboard._instance;
     }
 
-    public update(modPlayer: mod.Player, score: number, kills: number, lives: number): void {
-        mod.SetScoreboardPlayerValues(modPlayer, score, kills, lives);
+    public update(modPlayer: mod.Player, score: number, kills: number): void {
+        mod.SetScoreboardPlayerValues(modPlayer, score, kills);
     }
 
     private handleGameModeStarted(): void {
@@ -26,9 +26,8 @@ export class Scoreboard {
         );
         mod.SetScoreboardColumnNames(
             mod.Message(mod.stringkeys.scoreboard.score),
-            mod.Message(mod.stringkeys.scoreboard.kills),
-            mod.Message(mod.stringkeys.scoreboard.lives)
+            mod.Message(mod.stringkeys.scoreboard.kills)
         );
-        mod.SetScoreboardColumnWidths(1, 1, 1);
+        mod.SetScoreboardColumnWidths(1, 1);
     }
 }

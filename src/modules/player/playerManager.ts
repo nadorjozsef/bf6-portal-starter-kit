@@ -6,7 +6,7 @@ type PlayerJoinCallback = (player: Player) => void;
 export class PlayerManager {
     private static _instance: PlayerManager | undefined;
     private _players: Player[] = [];
-    private _onPlayerJoinGame: PlayerJoinCallback[] = [];
+    private _playerJoinCallbacks: PlayerJoinCallback[] = [];
 
     private constructor() {
         Events.OnPlayerJoinGame.subscribe(this.handlePlayerJoinGame.bind(this));
@@ -23,7 +23,7 @@ export class PlayerManager {
     private handlePlayerJoinGame(modPlayer: mod.Player): void {
         const player = new Player(modPlayer);
         this._players.push(player);
-        for (const callback of this._onPlayerJoinGame) {
+        for (const callback of this._playerJoinCallbacks) {
             callback(player);
         }
     }
@@ -37,13 +37,13 @@ export class PlayerManager {
     }
 
     public subscribePlayerJoinGame(callback: PlayerJoinCallback): void {
-        this._onPlayerJoinGame.push(callback);
+        this._playerJoinCallbacks.push(callback);
     }
 
     public unsubscribePlayerJoinGame(callback: PlayerJoinCallback): void {
-        const index = this._onPlayerJoinGame.indexOf(callback);
+        const index = this._playerJoinCallbacks.indexOf(callback);
         if (index !== -1) {
-            this._onPlayerJoinGame.splice(index, 1);
+            this._playerJoinCallbacks.splice(index, 1);
         }
     }
 

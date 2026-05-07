@@ -6,13 +6,15 @@ import { Scoreboard } from './modules/scoreboard/scoreboard.ts';
 import { CapturePointManager } from './modules/capturePoint/capturePointManager.ts';
 import { GameUIManager } from './modules/gameUI/gameUIManager.ts';
 import { ScoreboardManager } from './modules/scoreboard/scoreboardManager.ts';
+import { RestrictedAreaManager } from './modules/restrictedArea/restrictedAreaManager.ts';
 import { debug } from './debugTool/adminDebugTool.ts';
 
 const gameUI = GameUI.getInstance();
 const playerManager = PlayerManager.getInstance();
-const scoreboard = Scoreboard.getInstance();
 const teamManager = TeamManager.getInstance();
 const capturePointManager = CapturePointManager.getInstance();
-const gameModeManager = GameMode.GetInstance(playerManager, teamManager);
-GameUIManager.getInstance(gameUI, teamManager, capturePointManager, gameModeManager);
+GameMode.GetInstance(playerManager, teamManager);
+const restrictedAreas = RestrictedAreaManager.getInstance(playerManager);
+GameUIManager.getInstance(gameUI, teamManager, capturePointManager, restrictedAreas);
+const scoreboard = Scoreboard.getInstance();
 ScoreboardManager.getInstance(scoreboard, playerManager);

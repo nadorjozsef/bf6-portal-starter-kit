@@ -3,7 +3,10 @@ import type { GameUI } from '../gameUI/gameUI';
 import type { TeamManager } from '../team/teamManager';
 import type { Team } from '../team/team';
 import type { CapturePointManager } from '../capturePoint/capturePointManager';
-import type { GameMode } from '../gameMode/gameMode';
+import { config } from '../../config';
+import { RestrictedAreaManager } from '../restrictedArea/restrictedAreaManager';
+import { RedeployTimer } from '../restrictedArea/redeployTimer';
+import type { ProgressTracker } from '../capturePoint/progressTracker';
 
 export class GameUIManager {
     private static _instance: GameUIManager | undefined;
@@ -12,19 +15,21 @@ export class GameUIManager {
         private _gameUI: GameUI,
         private _teamManager: TeamManager,
         private _capturePointManager: CapturePointManager,
-        private _gameMode: GameMode
+        private _restrictedAreaManager: RestrictedAreaManager,
     ) {
         Events.OnGameModeStarted.subscribe(this.handleGameModeStarted.bind(this));
+        this._restrictedAreaManager.subscribePlayerRegistered(this.handleRestrictedAreaPlayerRegistered.bind(this));
+        this._capturePointManager.subscribePlayerRegistered(this.handleCapturePointManagerPlayerRegistered.bind(this));
     }
 
     static getInstance(
         gameUI: GameUI,
         teamManager: TeamManager,
         capturePointManager: CapturePointManager,
-        gameMode: GameMode
+        restrictedAreas: RestrictedAreaManager,
     ): GameUIManager {
         if (!GameUIManager._instance) {
-            GameUIManager._instance = new GameUIManager(gameUI, teamManager, capturePointManager, gameMode);
+            GameUIManager._instance = new GameUIManager(gameUI, teamManager, capturePointManager, restrictedAreas);
         }
         return GameUIManager._instance;
     }
@@ -43,18 +48,27 @@ export class GameUIManager {
     }
 
     private showTeamScoreBars(team1: Team, team2: Team): void {
-        const maxScore = this._gameMode.GAME_MODE_TARGET_SCORE;
+        const maxScore = config.gameMode.gameModeTargetScore;
         this._gameUI.teamScoreBars(team1.modObject, team1.scoreAccessor, team2.scoreAccessor, maxScore);
         this._gameUI.teamScoreBars(team2.modObject, team2.scoreAccessor, team1.scoreAccessor, maxScore);
     }
 
     private showCapturePoints(team1: Team, team2: Team): void {
         const capturePointsData = this._capturePointManager.getCapturePoints().map((capturePoint) => ({
+            letter: capturePoint.letter,
             ownerTeamIdAccessor: capturePoint.ownerTeamIdAccessor,
             isCapturingAccessor: capturePoint.isCapturingAccessor,
         }));
 
         this._gameUI.capturePoints(team1.modObject, capturePointsData);
         this._gameUI.capturePoints(team2.modObject, capturePointsData);
+    }
+
+    private handleRestrictedAreaPlayerRegistered(modPlayer: mod.Player, redeployTimer: RedeployTimer): void {
+        this._gameUI.restrictedAreaWarning(modPlayer, redeployTimer.isActiveAccessor, redeployTimer.timeToRedeployAccessor);
+    }
+
+    private handleCapturePointManagerPlayerRegistered(modPlayer: mod.Player, progressTracker: ProgressTracker): void {
+        this._gameUI.flagCaptureProgress(modPlayer, progressTracker.letterAccessor, progressTracker.isActiveAccessor, progressTracker.friendlyPlayersCountAccessor, progressTracker.enemyPlayersCountAccessor, progressTracker.progressAccessor, progressTracker.currentOwnerTeamIdAccessor);
     }
 }

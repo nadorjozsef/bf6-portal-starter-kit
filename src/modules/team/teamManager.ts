@@ -1,5 +1,6 @@
 import { Events } from 'bf6-portal-utils/events';
 import { Team } from '../team/team';
+import { config } from '../../config';
 
 export class TeamManager {
     private static _instance: TeamManager | undefined;
@@ -30,7 +31,8 @@ export class TeamManager {
     }
 
     private handleGameModeStarted(): void {
-        this._teams.push(new Team(mod.GetTeam(1)));
-        this._teams.push(new Team(mod.GetTeam(2)));
+        for (const teamConfig of config.teams) {
+            this._teams.push(new Team(mod.GetTeam(teamConfig.teamId)));
+        }
     }
 }

@@ -1,11 +1,10 @@
 import { SolidUI } from 'bf6-portal-utils/solid-ui';
 
 export class Player {
-    private _livesSignal = SolidUI.createSignal(1);
     private _scoreSignal = SolidUI.createSignal(0);
     private _killsSignal = SolidUI.createSignal(0);
 
-    constructor(private _modPlayer: mod.Player) {}
+    constructor(private _modPlayer: mod.Player) { }
 
     get id(): number {
         return mod.GetObjId(this._modPlayer);
@@ -21,17 +20,6 @@ export class Player {
 
     get isAlive() {
         return mod.GetSoldierState(this._modPlayer, mod.SoldierStateBool.IsAlive);
-    }
-
-    get livesAccessor(): SolidUI.Accessor<number> {
-        return this._livesSignal[0];
-    }
-
-    get lives(): number {
-        return this._livesSignal[0]();
-    }
-    set lives(value: number) {
-        this._livesSignal[1](value);
     }
 
     get scoreAccessor(): SolidUI.Accessor<number> {
@@ -54,5 +42,9 @@ export class Player {
     }
     set kills(value: number) {
         this._killsSignal[1](value);
+    }
+
+    public kill() {
+        mod.Kill(this._modPlayer);
     }
 }

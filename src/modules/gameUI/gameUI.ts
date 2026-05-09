@@ -11,10 +11,10 @@ interface TeamScoreProps {
 }
 
 interface TeamScoreBarProps {
-    x: number;
-    darkColor: mod.Vector;
-    brightColor: mod.Vector;
-    anchor: mod.UIAnchor;
+    backgroundColor: mod.Vector;
+    foregroundColor: mod.Vector;
+    progressionType: 'shrinking' | 'growing';
+    progressionDirection: 'leftToRight' | 'rightToLeft';
     maxScore: number;
 }
 
@@ -924,58 +924,81 @@ export class GameUI {
         opponentScoreAccessor: SolidUI.Accessor<number>,
         maxScore: number
     ): void {
-        this.teamScoreBar(modTeam, teamScoreAccessor, {
-            x: -94,
-            darkColor: UI.COLORS.BF_BLUE_DARK,
-            brightColor: UI.COLORS.BF_BLUE_BRIGHT,
-            anchor: mod.UIAnchor.TopLeft,
+        const leftContainer = SolidUI.h(UIContainer, {
+            position: { x: -94, y: 64 },
+            size: { width: 178, height: 12 },
+            bgFill: mod.UIBgFill.None,
+            visible: true,
+            depth: mod.UIDepth.AboveGameUI,
+            anchor: mod.UIAnchor.TopCenter,
+            receiver: modTeam,
+        });
+        const rightContainer = SolidUI.h(UIContainer, {
+            position: { x: 94, y: 64 },
+            size: { width: 178, height: 12 },
+            bgFill: mod.UIBgFill.None,
+            visible: true,
+            depth: mod.UIDepth.AboveGameUI,
+            anchor: mod.UIAnchor.TopCenter,
+            receiver: modTeam,
+        });
+        this.teamScoreBar(leftContainer, modTeam, teamScoreAccessor, {
+            foregroundColor: UI.COLORS.BF_BLUE_BRIGHT,
+            backgroundColor: UI.COLORS.BF_BLUE_DARK,
+            progressionType: 'shrinking',
+            progressionDirection: 'rightToLeft',
             maxScore,
         });
-        this.teamScoreBar(modTeam, opponentScoreAccessor, {
-            x: 94,
-            darkColor: UI.COLORS.BF_RED_DARK,
-            brightColor: UI.COLORS.BF_RED_BRIGHT,
-            anchor: mod.UIAnchor.TopRight,
+        this.teamScoreBar(rightContainer, modTeam, opponentScoreAccessor, {
+            foregroundColor: UI.COLORS.BF_RED_BRIGHT,
+            backgroundColor: UI.COLORS.BF_RED_DARK,
+            progressionType: 'shrinking',
+            progressionDirection: 'leftToRight',
             maxScore,
         });
     }
 
     private teamScoreBar(
+        parent: UIContainer,
         team: mod.Team,
         scoreAccessor: SolidUI.Accessor<number>,
         props: TeamScoreBarProps
     ): UIContainer {
-        const CONTAINER_WIDTH = 178;
-        const [widthSignal, setWidthSignal] = SolidUI.createSignal(0);
+        const [widthSignal, setWidthSignal] = SolidUI.createSignal(
+            props.progressionType === 'shrinking' ? parent.width : 0
+        );
 
         SolidUI.createEffect(() => {
-            const teamScorePercentige = (scoreAccessor() / props.maxScore) * 100;
-            setWidthSignal(+((teamScorePercentige / 100) * CONTAINER_WIDTH).toFixed(0));
+            const ratio = scoreAccessor() / props.maxScore;
+            const targetRatio = props.progressionType === 'shrinking' ? 1 - ratio : ratio;
+            setWidthSignal(Math.round(targetRatio * parent.width));
         });
-
         const container = SolidUI.h(UIContainer, {
-            x: props.x,
-            y: 64,
-            size: { width: CONTAINER_WIDTH, height: 12 },
-            bgColor: props.darkColor,
+            position: { x: 0, y: 0 },
+            size: { width: parent.width, height: parent.height },
+            bgColor: props.backgroundColor,
             bgFill: mod.UIBgFill.Solid,
             bgAlpha: 0.75,
             visible: true,
             depth: mod.UIDepth.AboveGameUI,
-            anchor: mod.UIAnchor.TopCenter,
+            anchor: mod.UIAnchor.TopLeft,
+            parent: parent,
             receiver: team,
         });
 
         SolidUI.h(UIContainer, {
             position: { x: 0, y: 0 },
             width: widthSignal,
-            height: 12,
-            bgColor: props.brightColor,
+            height: parent.height,
+            bgColor: props.foregroundColor,
             bgFill: mod.UIBgFill.Solid,
             bgAlpha: 0.75,
             visible: true,
             depth: mod.UIDepth.AboveGameUI,
-            anchor: props.anchor,
+            anchor:
+                (props.progressionDirection === 'leftToRight') === (props.progressionType === 'growing')
+                    ? mod.UIAnchor.TopLeft
+                    : mod.UIAnchor.TopRight,
             parent: container,
             receiver: team,
         });

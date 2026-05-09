@@ -4,6 +4,7 @@
         "activePlayersTextCenter": "vs",
         "rightActivePlayersText": "{}",
         "teamScore": "{}",
+        "targetScore": "{}",
         "capturePointA": "A",
         "capturePointB": "B",
         "capturePointC": "C",

@@ -1,6 +1,7 @@
 import { UI } from 'bf6-portal-utils/ui';
 import { UIContainer } from 'bf6-portal-utils/ui/components/container';
 import { UIText } from 'bf6-portal-utils/ui/components/text';
+import { UIImage } from 'bf6-portal-utils/ui/components/image';
 import { SolidUI } from 'bf6-portal-utils/solid-ui';
 import { Timers } from 'bf6-portal-utils/timers';
 
@@ -926,11 +927,13 @@ export class GameUI {
         });
 
         SolidUI.h(UIText, {
+            position: { x: 0, y: 0 },
+            size: { width: parent.width, height: parent.height },
             message: () => mod.Message(mod.stringkeys.gameUI.teamScore, scoreAccessor()),
             textSize: 34,
-            size: { width: parent.width, height: parent.height },
             textColor: props.foregroundColor,
             depth: mod.UIDepth.AboveGameUI,
+            anchor: mod.UIAnchor.Center,
             parent: container,
             receiver: modTeam,
         });
@@ -956,6 +959,46 @@ export class GameUI {
         const rightContainer = SolidUI.h(UIContainer, {
             position: { x: 94, y: 64 },
             size: { width: 178, height: 12 },
+            bgFill: mod.UIBgFill.None,
+            visible: true,
+            depth: mod.UIDepth.AboveGameUI,
+            anchor: mod.UIAnchor.TopCenter,
+            receiver: modTeam,
+        });
+        this.teamScoreBar(leftContainer, modTeam, teamScoreAccessor, {
+            foregroundColor: UI.COLORS.BF_BLUE_BRIGHT,
+            backgroundColor: UI.COLORS.BF_BLUE_DARK,
+            progressionType: 'shrinking',
+            progressionDirection: 'rightToLeft',
+            maxScore,
+        });
+        this.teamScoreBar(rightContainer, modTeam, opponentScoreAccessor, {
+            foregroundColor: UI.COLORS.BF_RED_BRIGHT,
+            backgroundColor: UI.COLORS.BF_RED_DARK,
+            progressionType: 'shrinking',
+            progressionDirection: 'leftToRight',
+            maxScore,
+        });
+    }
+
+    public teamScoreBarsTDM(
+        modTeam: mod.Team,
+        teamScoreAccessor: SolidUI.Accessor<number>,
+        opponentScoreAccessor: SolidUI.Accessor<number>,
+        maxScore: number
+    ): void {
+        const leftContainer = SolidUI.h(UIContainer, {
+            position: { x: -114, y: 64 },
+            size: { width: 138, height: 12 },
+            bgFill: mod.UIBgFill.None,
+            visible: true,
+            depth: mod.UIDepth.AboveGameUI,
+            anchor: mod.UIAnchor.TopCenter,
+            receiver: modTeam,
+        });
+        const rightContainer = SolidUI.h(UIContainer, {
+            position: { x: 114, y: 64 },
+            size: { width: 138, height: 12 },
             bgFill: mod.UIBgFill.None,
             visible: true,
             depth: mod.UIDepth.AboveGameUI,
@@ -1024,5 +1067,44 @@ export class GameUI {
         });
 
         return container;
+    }
+
+    public targetScore(modTeam: mod.Team, targetScore: number) {
+        const mainContainer = SolidUI.h(UIContainer, {
+            position: { x: 0, y: 54 },
+            size: { width: 64, height: 30 },
+            bgFill: mod.UIBgFill.Solid,
+            bgColor: UI.COLORS.BF_GREY_4,
+            visible: true,
+            bgAlpha: 0.75,
+            depth: mod.UIDepth.AboveGameUI,
+            anchor: mod.UIAnchor.TopCenter,
+            receiver: modTeam,
+        });
+
+        SolidUI.h(UIText, {
+            position: { x: 0, y: 0 },
+            size: { width: mainContainer.width, height: mainContainer.height },
+            message: () => mod.Message(mod.stringkeys.gameUI.targetScore, targetScore),
+            textSize: 28,
+            textColor: UI.COLORS.BF_GREY_1,
+            depth: mod.UIDepth.AboveGameUI,
+            anchor: mod.UIAnchor.Center,
+            parent: mainContainer,
+            receiver: modTeam,
+        });
+
+        SolidUI.h(UIImage, {
+            position: { x: 0, y: -15 },
+            size: { width: 25, height: 25 },
+            imageType: mod.UIImageType.CrownSolid,
+            imageColor: UI.COLORS.BF_GREY_1,
+            imageAlpha: 0.75,
+            visible: true,
+            depth: mod.UIDepth.AboveGameUI,
+            anchor: mod.UIAnchor.TopCenter,
+            parent: mainContainer,
+            receiver: modTeam,
+        });
     }
 }

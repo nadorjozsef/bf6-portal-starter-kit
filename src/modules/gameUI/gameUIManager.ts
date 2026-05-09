@@ -39,6 +39,7 @@ export class GameUIManager {
         const team2 = this._teamManager.getTeam(2);
         this.showTeamScores(team1, team2);
         this.showTeamScoreBars(team1, team2);
+        this.showTargetScore(team1, team2);
         this.showCapturePoints(team1, team2);
     }
 
@@ -49,8 +50,16 @@ export class GameUIManager {
 
     private showTeamScoreBars(team1: Team, team2: Team): void {
         const maxScore = config.gameMode.gameModeTargetScore;
-        this._gameUI.teamScoreBars(team1.modObject, team1.scoreAccessor, team2.scoreAccessor, maxScore);
-        this._gameUI.teamScoreBars(team2.modObject, team2.scoreAccessor, team1.scoreAccessor, maxScore);
+        // this._gameUI.teamScoreBars(team1.modObject, team1.scoreAccessor, team2.scoreAccessor, maxScore);
+        // this._gameUI.teamScoreBars(team2.modObject, team2.scoreAccessor, team1.scoreAccessor, maxScore);
+        this._gameUI.teamScoreBarsTDM(team1.modObject, team1.scoreAccessor, team2.scoreAccessor, maxScore);
+        this._gameUI.teamScoreBarsTDM(team2.modObject, team2.scoreAccessor, team1.scoreAccessor, maxScore);
+    }
+
+    private showTargetScore(team1: Team, team2: Team): void {
+        const targetScore = config.gameMode.gameModeTargetScore;
+        this._gameUI.targetScore(team1.modObject, targetScore);
+        this._gameUI.targetScore(team2.modObject, targetScore);
     }
 
     private showCapturePoints(team1: Team, team2: Team): void {

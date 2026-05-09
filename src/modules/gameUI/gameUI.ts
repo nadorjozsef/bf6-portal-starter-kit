@@ -48,7 +48,7 @@ function getStringKeyForLetter(letter: string): string {
 export class GameUI {
     private static _instance: GameUI | undefined;
 
-    private constructor() { }
+    private constructor() {}
 
     static getInstance(): GameUI {
         if (!GameUI._instance) {
@@ -64,8 +64,8 @@ export class GameUI {
         friendlyPlayersCountAccessor: SolidUI.Accessor<number>,
         enemyPlayersCountAccessor: SolidUI.Accessor<number>,
         progressAccessor: SolidUI.Accessor<number>,
-        currentOwnerTeamIdAccessor: SolidUI.Accessor<number>): void {
-
+        currentOwnerTeamIdAccessor: SolidUI.Accessor<number>
+    ): void {
         const mainContainer = SolidUI.h(UIContainer, {
             position: { x: 0, y: 170 },
             size: { width: 60, height: 60 },
@@ -75,13 +75,49 @@ export class GameUI {
             anchor: mod.UIAnchor.TopCenter,
             receiver: player,
         });
-        this.playerProgressBars(mainContainer, player, isActiveAccessor, progressAccessor, enemyPlayersCountAccessor, friendlyPlayersCountAccessor);
-        this.bigBlueCircleCapturePoint(mainContainer, player, isActiveAccessor, letterAccessor, progressAccessor, currentOwnerTeamIdAccessor, enemyPlayersCountAccessor);
-        this.bigBlueSquareCapturePoint(mainContainer, player, isActiveAccessor, letterAccessor, progressAccessor, currentOwnerTeamIdAccessor);
-        this.bigRedSquareCapturePoint(mainContainer, player, isActiveAccessor, letterAccessor, progressAccessor, currentOwnerTeamIdAccessor);
+        this.playerProgressBars(
+            mainContainer,
+            player,
+            isActiveAccessor,
+            progressAccessor,
+            enemyPlayersCountAccessor,
+            friendlyPlayersCountAccessor
+        );
+        this.bigBlueCircleCapturePoint(
+            mainContainer,
+            player,
+            isActiveAccessor,
+            letterAccessor,
+            progressAccessor,
+            currentOwnerTeamIdAccessor,
+            enemyPlayersCountAccessor
+        );
+        this.bigBlueSquareCapturePoint(
+            mainContainer,
+            player,
+            isActiveAccessor,
+            letterAccessor,
+            progressAccessor,
+            currentOwnerTeamIdAccessor
+        );
+        this.bigRedSquareCapturePoint(
+            mainContainer,
+            player,
+            isActiveAccessor,
+            letterAccessor,
+            progressAccessor,
+            currentOwnerTeamIdAccessor
+        );
     }
 
-    private playerProgressBars(parent: UIContainer, modPlayer: mod.Player, isActiveAccessor: SolidUI.Accessor<boolean>, progressAccessor: SolidUI.Accessor<number>, enemyPlayersCountAccessor: SolidUI.Accessor<number>, friendlyPlayersCountAccessor: SolidUI.Accessor<number>): void {
+    private playerProgressBars(
+        parent: UIContainer,
+        modPlayer: mod.Player,
+        isActiveAccessor: SolidUI.Accessor<boolean>,
+        progressAccessor: SolidUI.Accessor<number>,
+        enemyPlayersCountAccessor: SolidUI.Accessor<number>,
+        friendlyPlayersCountAccessor: SolidUI.Accessor<number>
+    ): void {
         const playersContainer = SolidUI.h(UIContainer, {
             position: { x: 0, y: 50 },
             size: { width: 90, height: 6 },
@@ -107,7 +143,9 @@ export class GameUI {
         // enemy players bar
         SolidUI.h(UIContainer, {
             position: { x: 0, y: 0 },
-            width: 90 * (enemyPlayersCountAccessor() / (friendlyPlayersCountAccessor() + enemyPlayersCountAccessor()) || 0),
+            width:
+                90 *
+                (enemyPlayersCountAccessor() / (friendlyPlayersCountAccessor() + enemyPlayersCountAccessor()) || 0),
             height: 6,
             bgFill: mod.UIBgFill.Solid,
             bgColor: UI.COLORS.BF_RED_BRIGHT,
@@ -148,12 +186,24 @@ export class GameUI {
         });
     }
 
-    private bigBlueCircleCapturePoint(parent: UIContainer, modPlayer: mod.Player, isActiveAccessor: SolidUI.Accessor<boolean>, letterAccessor: SolidUI.Accessor<string>, progressAccessor: SolidUI.Accessor<number>, currentOwnerTeamIdAccessor: SolidUI.Accessor<number>, enemyPlayersCountAccessor: SolidUI.Accessor<number>): void {
+    private bigBlueCircleCapturePoint(
+        parent: UIContainer,
+        modPlayer: mod.Player,
+        isActiveAccessor: SolidUI.Accessor<boolean>,
+        letterAccessor: SolidUI.Accessor<string>,
+        progressAccessor: SolidUI.Accessor<number>,
+        currentOwnerTeamIdAccessor: SolidUI.Accessor<number>,
+        enemyPlayersCountAccessor: SolidUI.Accessor<number>
+    ): void {
         const mainContainer = SolidUI.h(UIContainer, {
             position: { x: 0, y: 0 },
             size: { width: 60, height: 60 },
             bgFill: mod.UIBgFill.None,
-            visible: () => isActiveAccessor() && progressAccessor() === 1 && currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) && enemyPlayersCountAccessor() === 0,
+            visible: () =>
+                isActiveAccessor() &&
+                progressAccessor() === 1 &&
+                currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) &&
+                enemyPlayersCountAccessor() === 0,
             depth: mod.UIDepth.AboveGameUI,
             anchor: mod.UIAnchor.Center,
             parent: parent,
@@ -164,7 +214,11 @@ export class GameUI {
             message: mod.Message(mod.stringkeys.gameUI.circle),
             textSize: 60,
             width: 60,
-            visible: () => isActiveAccessor() && progressAccessor() === 1 && currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) && enemyPlayersCountAccessor() === 0,
+            visible: () =>
+                isActiveAccessor() &&
+                progressAccessor() === 1 &&
+                currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) &&
+                enemyPlayersCountAccessor() === 0,
             textColor: UI.COLORS.BF_BLUE_BRIGHT,
             textAlpha: 0.75,
             depth: mod.UIDepth.AboveGameUI,
@@ -177,7 +231,11 @@ export class GameUI {
             message: mod.Message(mod.stringkeys.gameUI.circle),
             textSize: 54,
             width: 54,
-            visible: () => isActiveAccessor() && progressAccessor() === 1 && currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) && enemyPlayersCountAccessor() === 0,
+            visible: () =>
+                isActiveAccessor() &&
+                progressAccessor() === 1 &&
+                currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) &&
+                enemyPlayersCountAccessor() === 0,
             textColor: UI.COLORS.BF_BLUE_DARK,
             textAlpha: 0.75,
             depth: mod.UIDepth.AboveGameUI,
@@ -190,7 +248,11 @@ export class GameUI {
             message: () => mod.Message(getStringKeyForLetter(letterAccessor())),
             textSize: 36,
             width: 44,
-            visible: () => isActiveAccessor() && progressAccessor() === 1 && currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) && enemyPlayersCountAccessor() === 0,
+            visible: () =>
+                isActiveAccessor() &&
+                progressAccessor() === 1 &&
+                currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) &&
+                enemyPlayersCountAccessor() === 0,
             textColor: UI.COLORS.BF_BLUE_BRIGHT,
             textAlpha: 1,
             depth: mod.UIDepth.AboveGameUI,
@@ -200,12 +262,23 @@ export class GameUI {
         });
     }
 
-    private bigBlueSquareCapturePoint(parent: UIContainer, modPlayer: mod.Player, isActiveAccessor: SolidUI.Accessor<boolean>, letterAccessor: SolidUI.Accessor<string>, progressAccessor: SolidUI.Accessor<number>, currentOwnerTeamIdAccessor: SolidUI.Accessor<number>): UIContainer {
+    private bigBlueSquareCapturePoint(
+        parent: UIContainer,
+        modPlayer: mod.Player,
+        isActiveAccessor: SolidUI.Accessor<boolean>,
+        letterAccessor: SolidUI.Accessor<string>,
+        progressAccessor: SolidUI.Accessor<number>,
+        currentOwnerTeamIdAccessor: SolidUI.Accessor<number>
+    ): UIContainer {
         const mainContainer = SolidUI.h(UIContainer, {
             position: { x: 0, y: 0 },
             size: { width: 50, height: 50 },
             bgFill: mod.UIBgFill.None,
-            visible: () => isActiveAccessor() && progressAccessor() < 1 && (currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) || currentOwnerTeamIdAccessor() === 0),
+            visible: () =>
+                isActiveAccessor() &&
+                progressAccessor() < 1 &&
+                (currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) ||
+                    currentOwnerTeamIdAccessor() === 0),
             depth: mod.UIDepth.AboveGameUI,
             anchor: mod.UIAnchor.Center,
             parent: parent,
@@ -218,7 +291,11 @@ export class GameUI {
             bgColor: UI.COLORS.BF_BLUE_BRIGHT,
             bgFill: mod.UIBgFill.Solid,
             bgAlpha: 0.75,
-            visible: () => isActiveAccessor() && progressAccessor() < 1 && (currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) || currentOwnerTeamIdAccessor() === 0),
+            visible: () =>
+                isActiveAccessor() &&
+                progressAccessor() < 1 &&
+                (currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) ||
+                    currentOwnerTeamIdAccessor() === 0),
             depth: mod.UIDepth.AboveGameUI,
             anchor: mod.UIAnchor.Center,
             parent: mainContainer,
@@ -231,7 +308,11 @@ export class GameUI {
             bgColor: UI.COLORS.BF_BLUE_DARK,
             bgFill: mod.UIBgFill.Solid,
             bgAlpha: 0.75,
-            visible: () => isActiveAccessor() && progressAccessor() < 1 && (currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) || currentOwnerTeamIdAccessor() === 0),
+            visible: () =>
+                isActiveAccessor() &&
+                progressAccessor() < 1 &&
+                (currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) ||
+                    currentOwnerTeamIdAccessor() === 0),
             depth: mod.UIDepth.AboveGameUI,
             anchor: mod.UIAnchor.Center,
             parent: mainContainer,
@@ -244,7 +325,11 @@ export class GameUI {
             bgColor: UI.COLORS.BF_BLUE_BRIGHT,
             bgFill: mod.UIBgFill.Solid,
             bgAlpha: 0.5,
-            visible: () => isActiveAccessor() && progressAccessor() < 1 && (currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) || currentOwnerTeamIdAccessor() === 0),
+            visible: () =>
+                isActiveAccessor() &&
+                progressAccessor() < 1 &&
+                (currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) ||
+                    currentOwnerTeamIdAccessor() === 0),
             depth: mod.UIDepth.AboveGameUI,
             anchor: mod.UIAnchor.BottomCenter,
             parent: mainContainer,
@@ -257,7 +342,11 @@ export class GameUI {
             width: 44,
             textColor: UI.COLORS.BF_BLUE_BRIGHT,
             textAlpha: 1,
-            visible: () => isActiveAccessor() && progressAccessor() < 1 && (currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) || currentOwnerTeamIdAccessor() === 0),
+            visible: () =>
+                isActiveAccessor() &&
+                progressAccessor() < 1 &&
+                (currentOwnerTeamIdAccessor() === mod.GetObjId(mod.GetTeam(modPlayer)) ||
+                    currentOwnerTeamIdAccessor() === 0),
             depth: mod.UIDepth.AboveGameUI,
             anchor: mod.UIAnchor.Center,
             parent: mainContainer,
@@ -267,12 +356,23 @@ export class GameUI {
         return mainContainer;
     }
 
-    private bigRedSquareCapturePoint(parent: UIContainer, modPlayer: mod.Player, isActiveAccessor: SolidUI.Accessor<boolean>, letterAccessor: SolidUI.Accessor<string>, progressAccessor: SolidUI.Accessor<number>, currentOwnerTeamIdAccessor: SolidUI.Accessor<number>): UIContainer {
+    private bigRedSquareCapturePoint(
+        parent: UIContainer,
+        modPlayer: mod.Player,
+        isActiveAccessor: SolidUI.Accessor<boolean>,
+        letterAccessor: SolidUI.Accessor<string>,
+        progressAccessor: SolidUI.Accessor<number>,
+        currentOwnerTeamIdAccessor: SolidUI.Accessor<number>
+    ): UIContainer {
         const mainContainer = SolidUI.h(UIContainer, {
             position: { x: 0, y: 0 },
             size: { width: 50, height: 50 },
             bgFill: mod.UIBgFill.None,
-            visible: () => isActiveAccessor() && progressAccessor() < 1 && (currentOwnerTeamIdAccessor() !== mod.GetObjId(mod.GetTeam(modPlayer)) && currentOwnerTeamIdAccessor() !== 0),
+            visible: () =>
+                isActiveAccessor() &&
+                progressAccessor() < 1 &&
+                currentOwnerTeamIdAccessor() !== mod.GetObjId(mod.GetTeam(modPlayer)) &&
+                currentOwnerTeamIdAccessor() !== 0,
             depth: mod.UIDepth.AboveGameUI,
             anchor: mod.UIAnchor.Center,
             parent: parent,
@@ -285,7 +385,11 @@ export class GameUI {
             bgColor: UI.COLORS.BF_RED_BRIGHT,
             bgFill: mod.UIBgFill.Solid,
             bgAlpha: 0.75,
-            visible: () => isActiveAccessor() && progressAccessor() < 1 && (currentOwnerTeamIdAccessor() !== mod.GetObjId(mod.GetTeam(modPlayer)) && currentOwnerTeamIdAccessor() !== 0),
+            visible: () =>
+                isActiveAccessor() &&
+                progressAccessor() < 1 &&
+                currentOwnerTeamIdAccessor() !== mod.GetObjId(mod.GetTeam(modPlayer)) &&
+                currentOwnerTeamIdAccessor() !== 0,
             depth: mod.UIDepth.AboveGameUI,
             anchor: mod.UIAnchor.Center,
             parent: mainContainer,
@@ -298,7 +402,11 @@ export class GameUI {
             bgColor: UI.COLORS.BF_RED_DARK,
             bgFill: mod.UIBgFill.Solid,
             bgAlpha: 0.75,
-            visible: () => isActiveAccessor() && progressAccessor() < 1 && (currentOwnerTeamIdAccessor() !== mod.GetObjId(mod.GetTeam(modPlayer)) && currentOwnerTeamIdAccessor() !== 0),
+            visible: () =>
+                isActiveAccessor() &&
+                progressAccessor() < 1 &&
+                currentOwnerTeamIdAccessor() !== mod.GetObjId(mod.GetTeam(modPlayer)) &&
+                currentOwnerTeamIdAccessor() !== 0,
             depth: mod.UIDepth.AboveGameUI,
             anchor: mod.UIAnchor.Center,
             parent: mainContainer,
@@ -311,7 +419,11 @@ export class GameUI {
             bgColor: UI.COLORS.BF_RED_DARK,
             bgFill: mod.UIBgFill.Solid,
             bgAlpha: 0.5,
-            visible: () => isActiveAccessor() && progressAccessor() < 1 && (currentOwnerTeamIdAccessor() !== mod.GetObjId(mod.GetTeam(modPlayer)) && currentOwnerTeamIdAccessor() !== 0),
+            visible: () =>
+                isActiveAccessor() &&
+                progressAccessor() < 1 &&
+                currentOwnerTeamIdAccessor() !== mod.GetObjId(mod.GetTeam(modPlayer)) &&
+                currentOwnerTeamIdAccessor() !== 0,
             depth: mod.UIDepth.AboveGameUI,
             anchor: mod.UIAnchor.TopCenter,
             parent: mainContainer,
@@ -324,7 +436,11 @@ export class GameUI {
             width: 44,
             textColor: UI.COLORS.BF_RED_BRIGHT,
             textAlpha: 1,
-            visible: () => isActiveAccessor() && progressAccessor() < 1 && (currentOwnerTeamIdAccessor() !== mod.GetObjId(mod.GetTeam(modPlayer)) && currentOwnerTeamIdAccessor() !== 0),
+            visible: () =>
+                isActiveAccessor() &&
+                progressAccessor() < 1 &&
+                currentOwnerTeamIdAccessor() !== mod.GetObjId(mod.GetTeam(modPlayer)) &&
+                currentOwnerTeamIdAccessor() !== 0,
             depth: mod.UIDepth.AboveGameUI,
             anchor: mod.UIAnchor.Center,
             parent: mainContainer,
@@ -600,7 +716,11 @@ export class GameUI {
         return squareContainer;
     }
 
-    public restrictedAreaWarning(player: mod.Player, isActiveAccessor: SolidUI.Accessor<boolean>, timeToRedeployAccessor: SolidUI.Accessor<number>): UIContainer {
+    public restrictedAreaWarning(
+        player: mod.Player,
+        isActiveAccessor: SolidUI.Accessor<boolean>,
+        timeToRedeployAccessor: SolidUI.Accessor<number>
+    ): UIContainer {
         const container = SolidUI.h(UIContainer, {
             position: { x: 0, y: 200 },
             size: { width: 500, height: 200 },
@@ -609,7 +729,7 @@ export class GameUI {
             bgAlpha: 1,
             visible: isActiveAccessor,
             depth: mod.UIDepth.AboveGameUI,
-            anchor: mod.UIAnchor.TopCenter
+            anchor: mod.UIAnchor.TopCenter,
         });
         SolidUI.h(UIText, {
             message: () => mod.Message(mod.stringkeys.gameUI.timeToRedeploy, timeToRedeployAccessor()),
@@ -668,7 +788,8 @@ export class GameUI {
         isActiveAccessor: SolidUI.Accessor<boolean>,
         friendlyPlayersCountAccessor: SolidUI.Accessor<number>,
         enemyPlayersCountAccessor: SolidUI.Accessor<number>,
-        progressAccessor: SolidUI.Accessor<number>): UIContainer {
+        progressAccessor: SolidUI.Accessor<number>
+    ): UIContainer {
         const livesUI = SolidUI.h(UIContainer, {
             position: { x: 400, y: 100 },
             size: { width: 100, height: 100 },

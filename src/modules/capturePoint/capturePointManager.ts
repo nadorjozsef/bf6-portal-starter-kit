@@ -56,7 +56,7 @@ export class CapturePointManager {
 
     private handleGameModeStarted(): void {
         const modCapturePoints = convertArray<mod.CapturePoint>(mod.AllCapturePoints());
-        const letters = ["A", "B", "C", "D", "E", "F", "G"];
+        const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
         for (const [index, modCapturePoint] of modCapturePoints.entries()) {
             this._capturePoints.push(new CapturePoint(modCapturePoint, letters[index]));
         }
@@ -78,7 +78,7 @@ export class CapturePointManager {
 
     // todo remove callback
     private handlePlayerLeaveGame(playerId: number): void {
-        const progressTracker = this._progressTracker.find(progress => progress.playerId === playerId);
+        const progressTracker = this._progressTracker.find((progress) => progress.playerId === playerId);
         if (progressTracker) {
             progressTracker.playerExited();
             this._progressTracker.splice(this._progressTracker.indexOf(progressTracker), 1);
@@ -99,14 +99,18 @@ export class CapturePointManager {
     private handlePlayerEnterCapturePoint(modPlayer: mod.Player, modCapturePoint: mod.CapturePoint): void {
         const capturePoint = this.getCapturePoint(modCapturePoint);
         capturePoint.playerEntered(modPlayer);
-        const progressTracker = this._progressTracker.find(progressTracker => progressTracker.playerId === mod.GetObjId(modPlayer));
+        const progressTracker = this._progressTracker.find(
+            (progressTracker) => progressTracker.playerId === mod.GetObjId(modPlayer)
+        );
         progressTracker?.playerEntered(capturePoint);
     }
 
     private handlePlayerExitCapturePoint(modPlayer: mod.Player, modCapturePoint: mod.CapturePoint): void {
         const capturePoint = this.getCapturePoint(modCapturePoint);
         capturePoint.playerExited(modPlayer);
-        const progressTracker = this._progressTracker.find(progressTracker => progressTracker.playerId === mod.GetObjId(modPlayer));
+        const progressTracker = this._progressTracker.find(
+            (progressTracker) => progressTracker.playerId === mod.GetObjId(modPlayer)
+        );
         progressTracker?.playerExited();
         if (capturePoint.playersOnPoint.length === 0) {
             capturePoint.isCapturing = false;

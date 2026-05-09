@@ -21,12 +21,12 @@ export interface PlayerConfig {
 }
 
 export interface TeamsConfig {
-    teamId: number,
+    teamId: number;
 }
 
 export interface RestrictedArea {
-    id: number,
-    ownerTeamId?: number,
+    id: number;
+    ownerTeamId?: number;
 }
 
 export const config: Config = {
@@ -41,10 +41,7 @@ export const config: Config = {
     player: {
         killScore: 1,
     },
-    teams: [
-        { teamId: 1 },
-        { teamId: 2 },
-    ],
+    teams: [{ teamId: 1 }, { teamId: 2 }],
     restrictedAreas: [
         { id: 301, ownerTeamId: 1 },
         { id: 302, ownerTeamId: 2 },

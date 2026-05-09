@@ -4,7 +4,7 @@ export class Player {
     private _scoreSignal = SolidUI.createSignal(0);
     private _killsSignal = SolidUI.createSignal(0);
 
-    constructor(private _modPlayer: mod.Player) { }
+    constructor(private _modPlayer: mod.Player) {}
 
     get id(): number {
         return mod.GetObjId(this._modPlayer);

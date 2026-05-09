@@ -15,7 +15,7 @@ export class GameUIManager {
         private _gameUI: GameUI,
         private _teamManager: TeamManager,
         private _capturePointManager: CapturePointManager,
-        private _restrictedAreaManager: RestrictedAreaManager,
+        private _restrictedAreaManager: RestrictedAreaManager
     ) {
         Events.OnGameModeStarted.subscribe(this.handleGameModeStarted.bind(this));
         this._restrictedAreaManager.subscribePlayerRegistered(this.handleRestrictedAreaPlayerRegistered.bind(this));
@@ -26,7 +26,7 @@ export class GameUIManager {
         gameUI: GameUI,
         teamManager: TeamManager,
         capturePointManager: CapturePointManager,
-        restrictedAreas: RestrictedAreaManager,
+        restrictedAreas: RestrictedAreaManager
     ): GameUIManager {
         if (!GameUIManager._instance) {
             GameUIManager._instance = new GameUIManager(gameUI, teamManager, capturePointManager, restrictedAreas);
@@ -65,10 +65,22 @@ export class GameUIManager {
     }
 
     private handleRestrictedAreaPlayerRegistered(modPlayer: mod.Player, redeployTimer: RedeployTimer): void {
-        this._gameUI.restrictedAreaWarning(modPlayer, redeployTimer.isActiveAccessor, redeployTimer.timeToRedeployAccessor);
+        this._gameUI.restrictedAreaWarning(
+            modPlayer,
+            redeployTimer.isActiveAccessor,
+            redeployTimer.timeToRedeployAccessor
+        );
     }
 
     private handleCapturePointManagerPlayerRegistered(modPlayer: mod.Player, progressTracker: ProgressTracker): void {
-        this._gameUI.flagCaptureProgress(modPlayer, progressTracker.letterAccessor, progressTracker.isActiveAccessor, progressTracker.friendlyPlayersCountAccessor, progressTracker.enemyPlayersCountAccessor, progressTracker.progressAccessor, progressTracker.currentOwnerTeamIdAccessor);
+        this._gameUI.flagCaptureProgress(
+            modPlayer,
+            progressTracker.letterAccessor,
+            progressTracker.isActiveAccessor,
+            progressTracker.friendlyPlayersCountAccessor,
+            progressTracker.enemyPlayersCountAccessor,
+            progressTracker.progressAccessor,
+            progressTracker.currentOwnerTeamIdAccessor
+        );
     }
 }

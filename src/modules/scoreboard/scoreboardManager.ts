@@ -23,11 +23,7 @@ export class ScoreboardManager {
 
     private handlePlayerJoinGame(player: Player): void {
         SolidUI.createEffect(() => {
-            this._scoreboard.update(
-                player.modObject,
-                player.scoreAccessor(),
-                player.killsAccessor()
-            );
+            this._scoreboard.update(player.modObject, player.scoreAccessor(), player.killsAccessor());
         });
         this.initialize(player);
     }

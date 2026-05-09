@@ -1,6 +1,6 @@
 import { Events } from 'bf6-portal-utils/events/index.ts';
 import { config } from '../../config.ts';
-import { RedeployTimer } from "./redeployTimer.ts";
+import { RedeployTimer } from './redeployTimer.ts';
 import type { PlayerManager } from '../player/playerManager.ts';
 
 type RegisterPlayerCallback = (player: mod.Player, timer: RedeployTimer) => void;
@@ -38,7 +38,7 @@ export class RestrictedAreaManager {
 
     // todo remove callback
     private handlePlayerLeaveGame(playerId: number): void {
-        const redeployTimer = this._redeployTimers.find(timer => timer.playerId === playerId);
+        const redeployTimer = this._redeployTimers.find((timer) => timer.playerId === playerId);
         if (redeployTimer) {
             redeployTimer.reset();
             this._redeployTimers.splice(this._redeployTimers.indexOf(redeployTimer), 1);
@@ -49,7 +49,7 @@ export class RestrictedAreaManager {
         if (!this.isRestrictiveAreaForPlayer(modPlayer, modAreaTrigger)) {
             return;
         }
-        const redeployTimer = this._redeployTimers.find(timer => timer.playerId === mod.GetObjId(modPlayer));
+        const redeployTimer = this._redeployTimers.find((timer) => timer.playerId === mod.GetObjId(modPlayer));
         if (redeployTimer) {
             redeployTimer.start();
         }
@@ -59,7 +59,7 @@ export class RestrictedAreaManager {
         if (!this.isRestrictiveAreaForPlayer(modPlayer, modAreaTrigger)) {
             return;
         }
-        const redeployTimer = this._redeployTimers.find(timer => timer.playerId === mod.GetObjId(modPlayer));
+        const redeployTimer = this._redeployTimers.find((timer) => timer.playerId === mod.GetObjId(modPlayer));
         if (redeployTimer) {
             redeployTimer.reset();
         }
@@ -68,6 +68,8 @@ export class RestrictedAreaManager {
     private isRestrictiveAreaForPlayer(modPlayer: mod.Player, modAreaTrigger: mod.AreaTrigger): boolean {
         const playerTeamId = mod.GetObjId(mod.GetTeam(modPlayer));
         const areaTriggerId = mod.GetObjId(modAreaTrigger);
-        return config.restrictedAreas.some(restrictedArea => restrictedArea.id === areaTriggerId && restrictedArea.ownerTeamId !== playerTeamId);
+        return config.restrictedAreas.some(
+            (restrictedArea) => restrictedArea.id === areaTriggerId && restrictedArea.ownerTeamId !== playerTeamId
+        );
     }
 }

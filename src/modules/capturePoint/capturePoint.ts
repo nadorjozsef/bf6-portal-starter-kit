@@ -5,7 +5,10 @@ export class CapturePoint {
     private _isCapturing = SolidUI.createSignal(false);
     private _playersOnPoint: mod.Player[] = [];
 
-    constructor(private _modCapturePoint: mod.CapturePoint, private _letter: string) { }
+    constructor(
+        private _modCapturePoint: mod.CapturePoint,
+        private _letter: string
+    ) {}
 
     get id(): number {
         return mod.GetObjId(this._modCapturePoint);
@@ -30,7 +33,7 @@ export class CapturePoint {
     }
 
     public playerExited(modPlayer: mod.Player): void {
-        const index = this._playersOnPoint.findIndex(player => mod.GetObjId(player) === mod.GetObjId(modPlayer));
+        const index = this._playersOnPoint.findIndex((player) => mod.GetObjId(player) === mod.GetObjId(modPlayer));
         if (index !== -1) {
             this._playersOnPoint.splice(index, 1);
         }

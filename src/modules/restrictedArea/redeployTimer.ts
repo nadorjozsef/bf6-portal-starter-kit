@@ -1,13 +1,13 @@
-import { Clocks } from "bf6-portal-utils/clocks";
-import { SolidUI } from "bf6-portal-utils/solid-ui/index.ts";
-import type { Player } from "../player/player.ts";
+import { Clocks } from 'bf6-portal-utils/clocks';
+import { SolidUI } from 'bf6-portal-utils/solid-ui/index.ts';
+import type { Player } from '../player/player.ts';
 import { Sounds } from 'bf6-portal-utils/sounds';
 
 export class RedeployTimer {
     private _timeToRedeploy = SolidUI.createSignal(0);
     private _isActive = SolidUI.createSignal(false);
 
-    constructor(private _player: Player) { }
+    constructor(private _player: Player) {}
 
     get playerId(): number {
         return this._player.id;
@@ -34,7 +34,9 @@ export class RedeployTimer {
 
     private _redeployClock = new Clocks.CountDownClock(10, {
         onSecond: (seconds) => this.onSecond(seconds),
-        onComplete: () => { this.onComplete() },
+        onComplete: () => {
+            this.onComplete();
+        },
     });
 
     private onSecond(seconds: number): void {

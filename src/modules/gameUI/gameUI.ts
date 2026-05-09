@@ -5,9 +5,8 @@ import { SolidUI } from 'bf6-portal-utils/solid-ui';
 import { Timers } from 'bf6-portal-utils/timers';
 
 interface TeamScoreProps {
-    x: number;
-    darkColor: mod.Vector;
-    brightColor: mod.Vector;
+    backgroundColor: mod.Vector;
+    foregroundColor: mod.Vector;
 }
 
 interface TeamScoreBarProps {
@@ -845,19 +844,40 @@ export class GameUI {
         teamScoreAccessor: SolidUI.Accessor<number>,
         opponentScoreAccessor: SolidUI.Accessor<number>
     ): void {
-        this.teamScore(modTeam, teamScoreAccessor, {
-            x: -233,
-            darkColor: UI.COLORS.BF_BLUE_DARK,
-            brightColor: UI.COLORS.BF_BLUE_BRIGHT,
+        const leftContainer = SolidUI.h(UIContainer, {
+            position: { x: -233, y: 54 },
+            size: { width: 84, height: 34 },
+            bgFill: mod.UIBgFill.None,
+            visible: true,
+            depth: mod.UIDepth.AboveGameUI,
+            anchor: mod.UIAnchor.TopCenter,
+            receiver: modTeam,
         });
-        this.teamScore(modTeam, opponentScoreAccessor, {
-            x: 233,
-            darkColor: UI.COLORS.BF_RED_DARK,
-            brightColor: UI.COLORS.BF_RED_BRIGHT,
+        const rightContainer = SolidUI.h(UIContainer, {
+            position: { x: 233, y: 54 },
+            size: { width: 84, height: 34 },
+            bgFill: mod.UIBgFill.None,
+            visible: true,
+            depth: mod.UIDepth.AboveGameUI,
+            anchor: mod.UIAnchor.TopCenter,
+            receiver: modTeam,
+        });
+        this.teamScore(leftContainer, modTeam, teamScoreAccessor, {
+            backgroundColor: UI.COLORS.BF_BLUE_DARK,
+            foregroundColor: UI.COLORS.BF_BLUE_BRIGHT,
+        });
+        this.teamScore(rightContainer, modTeam, opponentScoreAccessor, {
+            backgroundColor: UI.COLORS.BF_RED_DARK,
+            foregroundColor: UI.COLORS.BF_RED_BRIGHT,
         });
     }
 
-    private teamScore(team: mod.Team, scoreAccessor: SolidUI.Accessor<number>, props: TeamScoreProps): UIContainer {
+    private teamScore(
+        parent: UIContainer,
+        modTeam: mod.Team,
+        scoreAccessor: SolidUI.Accessor<number>,
+        props: TeamScoreProps
+    ): UIContainer {
         const [alphaSignal, setAlphaSignal] = SolidUI.createSignal(0);
 
         SolidUI.createEffect(() => {
@@ -880,39 +900,39 @@ export class GameUI {
         });
 
         const container = SolidUI.h(UIContainer, {
-            x: props.x,
-            y: 54,
-            size: { width: 84, height: 34 },
-            bgColor: props.darkColor,
+            position: { x: 0, y: 0 },
+            size: { width: parent.width, height: parent.height },
+            bgColor: props.backgroundColor,
             bgFill: mod.UIBgFill.Solid,
             bgAlpha: 0.75,
             visible: true,
             depth: mod.UIDepth.AboveGameUI,
-            anchor: mod.UIAnchor.TopCenter,
-            receiver: team,
+            anchor: mod.UIAnchor.TopLeft,
+            parent,
+            receiver: modTeam,
         });
 
         SolidUI.h(UIContainer, {
             position: { x: 0, y: 0 },
-            size: { width: 84, height: 34 },
-            bgColor: props.brightColor,
+            size: { width: parent.width, height: parent.height },
+            bgColor: props.foregroundColor,
             bgFill: mod.UIBgFill.Solid,
             bgAlpha: alphaSignal,
             visible: true,
             depth: mod.UIDepth.AboveGameUI,
             anchor: mod.UIAnchor.TopLeft,
             parent: container,
-            receiver: team,
+            receiver: modTeam,
         });
 
         SolidUI.h(UIText, {
             message: () => mod.Message(mod.stringkeys.gameUI.teamScore, scoreAccessor()),
             textSize: 34,
-            width: 84,
-            textColor: props.brightColor,
+            size: { width: parent.width, height: parent.height },
+            textColor: props.foregroundColor,
             depth: mod.UIDepth.AboveGameUI,
             parent: container,
-            receiver: team,
+            receiver: modTeam,
         });
 
         return container;
@@ -960,7 +980,7 @@ export class GameUI {
 
     private teamScoreBar(
         parent: UIContainer,
-        team: mod.Team,
+        modTeam: mod.Team,
         scoreAccessor: SolidUI.Accessor<number>,
         props: TeamScoreBarProps
     ): UIContainer {
@@ -983,7 +1003,7 @@ export class GameUI {
             depth: mod.UIDepth.AboveGameUI,
             anchor: mod.UIAnchor.TopLeft,
             parent: parent,
-            receiver: team,
+            receiver: modTeam,
         });
 
         SolidUI.h(UIContainer, {
@@ -1000,7 +1020,7 @@ export class GameUI {
                     ? mod.UIAnchor.TopLeft
                     : mod.UIAnchor.TopRight,
             parent: container,
-            receiver: team,
+            receiver: modTeam,
         });
 
         return container;

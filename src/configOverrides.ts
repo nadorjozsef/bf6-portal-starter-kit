@@ -1,4 +1,4 @@
-import { setGameModeOverrides } from './modules/gameMode/gameModeConfig';
+import { setGameModeOverrides } from './gameModes/teamDeathmatch/gameModeConfig';
 import { setCapturePointOverrides } from './modules/capturePoint/capturePointConfig';
 import { setTeamOverrides } from './modules/team/teamConfig';
 import { setRestrictedAreaOverrides } from './modules/restrictedArea/restrictedAreaConfig';

@@ -1,8 +1,8 @@
 import { Events } from 'bf6-portal-utils/events';
-import { PlayerManager } from '../player/playerManager';
-import { TeamManager } from '../team/teamManager';
-import type { Player } from '../player/player';
-import type { Team } from '../team/team';
+import { PlayerManager } from '../../modules/player/playerManager';
+import { TeamManager } from '../../modules/team/teamManager';
+import type { Player } from '../../modules/player/player';
+import type { Team } from '../../modules/team/team';
 import { convertArray } from '../../helpers';
 import { gameModeConfig } from './gameModeConfig';
 

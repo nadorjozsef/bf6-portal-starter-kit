@@ -1,5 +1,5 @@
 import { Events } from 'bf6-portal-utils/events/index.ts';
-import { config } from '../../config.ts';
+import { restrictedAreaConfig } from './restrictedAreaConfig.ts';
 import { RedeployTimer } from './redeployTimer.ts';
 import type { PlayerManager } from '../player/playerManager.ts';
 
@@ -68,7 +68,7 @@ export class RestrictedAreaManager {
     private isRestrictiveAreaForPlayer(modPlayer: mod.Player, modAreaTrigger: mod.AreaTrigger): boolean {
         const playerTeamId = mod.GetObjId(mod.GetTeam(modPlayer));
         const areaTriggerId = mod.GetObjId(modAreaTrigger);
-        return config.restrictedAreas.some(
+        return restrictedAreaConfig.objects.some(
             (restrictedArea) => restrictedArea.id === areaTriggerId && restrictedArea.ownerTeamId !== playerTeamId
         );
     }

@@ -2,6 +2,7 @@ import { Events } from 'bf6-portal-utils/events';
 import { CapturePoint } from './capturePoint';
 import { convertArray } from '../../helpers';
 import { ProgressTracker } from './progressTracker';
+import { capturePointConfig } from './capturePointConfig';
 
 type RegisterPlayerCallback = (player: mod.Player, progressTracker: ProgressTracker) => void;
 
@@ -62,9 +63,9 @@ export class CapturePointManager {
         }
         for (const capturePoint of this._capturePoints) {
             mod.EnableGameModeObjective(capturePoint.modObject, true);
-            mod.SetCapturePointCapturingTime(capturePoint.modObject, 5);
-            mod.SetCapturePointNeutralizationTime(capturePoint.modObject, 5);
-            mod.SetMaxCaptureMultiplier(capturePoint.modObject, 1);
+            mod.SetCapturePointCapturingTime(capturePoint.modObject, capturePointConfig.captureTime);
+            mod.SetCapturePointNeutralizationTime(capturePoint.modObject, capturePointConfig.neutralizationTime);
+            mod.SetMaxCaptureMultiplier(capturePoint.modObject, capturePointConfig.maxCaptureMultiplier);
         }
     }
 

@@ -4,7 +4,7 @@ import { TeamManager } from '../team/teamManager';
 import type { Player } from '../player/player';
 import type { Team } from '../team/team';
 import { convertArray } from '../../helpers';
-import { config } from '../../config';
+import { gameModeConfig } from './gameModeConfig';
 
 export class GameMode {
     private static _instance: GameMode | undefined;
@@ -27,16 +27,16 @@ export class GameMode {
 
     private handleCapturePointCaptured(capturePoint: mod.CapturePoint): void {
         const modTeam = mod.GetCurrentOwnerTeam(capturePoint);
-        this._teamManager.getTeam(modTeam).score += config.capturePoint.teamCaptureScore;
+        this._teamManager.getTeam(modTeam).score += gameModeConfig.teamCaptureScore;
         const modPlayersArray = mod.GetPlayersOnPoint(capturePoint);
         const modPlayers = convertArray<mod.Player>(modPlayersArray);
         for (const player of this._playerManager.getPlayers(modPlayers)) {
-            player.score += config.capturePoint.playerCaptureScore;
+            player.score += gameModeConfig.playerCaptureScore;
         }
     }
 
     private handleGameModeStarted(): void {
-        mod.SetGameModeTimeLimit(config.gameMode.gameModeTimeLimit);
+        mod.SetGameModeTimeLimit(gameModeConfig.timeLimit);
         mod.LoadMusic(mod.MusicPackages.Core);
     }
 
@@ -51,7 +51,7 @@ export class GameMode {
         this.updatePlayerScore(player);
 
         // Todo: set winning, losing teams?, repeat?
-        if (team1.score === config.gameMode.gameModeTargetScore - 5 || team2.score === config.gameMode.gameModeTargetScore - 5) {
+        if (team1.score === gameModeConfig.targetScore - 5 || team2.score === gameModeConfig.targetScore - 5) {
             mod.PlayMusic(mod.MusicEvents.Core_LastPhaseBegin);
         }
     }
@@ -62,15 +62,15 @@ export class GameMode {
         } else if (player.teamId === 2) {
             team2.score++;
         }
-        if (team1.score >= config.gameMode.gameModeTargetScore) {
+        if (team1.score >= gameModeConfig.targetScore) {
             mod.EndGameMode(mod.GetTeam(1));
-        } else if (team2.score >= config.gameMode.gameModeTargetScore) {
+        } else if (team2.score >= gameModeConfig.targetScore) {
             mod.EndGameMode(mod.GetTeam(2));
         }
     }
 
     private updatePlayerScore(player: Player) {
         player.kills++;
-        player.score += config.player.killScore;
+        player.score += gameModeConfig.killScore;
     }
 }

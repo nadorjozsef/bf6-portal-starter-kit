@@ -3,7 +3,7 @@ import type { GameUI } from '../gameUI/gameUI';
 import type { TeamManager } from '../team/teamManager';
 import type { Team } from '../team/team';
 import type { CapturePointManager } from '../capturePoint/capturePointManager';
-import { config } from '../../config';
+import { configOverrides } from '../../configOverrides';
 import { RestrictedAreaManager } from '../restrictedArea/restrictedAreaManager';
 import { RedeployTimer } from '../restrictedArea/redeployTimer';
 import type { ProgressTracker } from '../capturePoint/progressTracker';
@@ -49,7 +49,7 @@ export class GameUIManager {
     }
 
     private showTeamScoreBars(team1: Team, team2: Team): void {
-        const maxScore = config.gameMode.gameModeTargetScore;
+        const maxScore = configOverrides.gameMode.targetScore;
         // this._gameUI.teamScoreBars(team1.modObject, team1.scoreAccessor, team2.scoreAccessor, maxScore);
         // this._gameUI.teamScoreBars(team2.modObject, team2.scoreAccessor, team1.scoreAccessor, maxScore);
         this._gameUI.teamScoreBarsTDM(team1.modObject, team1.scoreAccessor, team2.scoreAccessor, maxScore);
@@ -57,7 +57,7 @@ export class GameUIManager {
     }
 
     private showTargetScore(team1: Team, team2: Team): void {
-        const targetScore = config.gameMode.gameModeTargetScore;
+        const targetScore = configOverrides.gameMode.targetScore;
         this._gameUI.targetScore(team1.modObject, targetScore);
         this._gameUI.targetScore(team2.modObject, targetScore);
     }

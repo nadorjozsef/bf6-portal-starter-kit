@@ -1,14 +1,13 @@
-import { Events } from 'bf6-portal-utils/events';
 import type { TeamManager } from '../../modules/team/teamManager';
 import type { Team } from '../../modules/team/team';
 import type { CapturePointManager } from '../../modules/capturePoint/capturePointManager';
-import { gameModeConfig } from '../teamDeathmatch/gameModeConfig';
 import { RestrictedAreaManager } from '../../modules/restrictedArea/restrictedAreaManager';
 import { RedeployTimer } from '../../modules/restrictedArea/redeployTimer';
 import type { ProgressTracker } from '../../modules/capturePoint/progressTracker';
-import { teamScoreBars, teamScores } from '../../gameUI/teamScoreUI';
-import { capturePoints, flagCaptureProgress } from '../../gameUI/capturePointUI';
-import { restrictedAreaWarning } from '../../gameUI/restrictedAreaUI';
+import { renderTeamProgressionBars, renderTeamScores } from '../../UI/teamScoreUI';
+import { renderAllCapturePoints, renderFlagCaptureProgress } from '../../UI/capturePointUI';
+import { renderRestrictedAreaWarning } from '../../UI/restrictedAreaUI';
+import { gameModeConfig } from './config';
 
 export class GameUIManager {
     private static _instance: GameUIManager | undefined;
@@ -18,9 +17,10 @@ export class GameUIManager {
         private _capturePointManager: CapturePointManager,
         private _restrictedAreaManager: RestrictedAreaManager
     ) {
-        Events.OnGameModeStarted.subscribe(this.handleGameModeStarted.bind(this));
         this._restrictedAreaManager.subscribePlayerRegistered(this.handleRestrictedAreaPlayerRegistered.bind(this));
         this._capturePointManager.subscribePlayerRegistered(this.handleCapturePointManagerPlayerRegistered.bind(this));
+        this._capturePointManager.subscribeCapturePointsInitialized(this.handleCapturePointsInitialized.bind(this));
+        this._teamManager.subscribeTeamsInitialized(this.handleTeamsInitialized.bind(this));
     }
 
     static getInstance(
@@ -34,23 +34,28 @@ export class GameUIManager {
         return GameUIManager._instance;
     }
 
-    private handleGameModeStarted(): void {
+    private handleTeamsInitialized(): void {
         const team1 = this._teamManager.getTeam(1);
         const team2 = this._teamManager.getTeam(2);
         this.showTeamScores(team1, team2);
         this.showTeamScoreBars(team1, team2);
+    }
+
+    private handleCapturePointsInitialized(): void {
+        const team1 = this._teamManager.getTeam(1);
+        const team2 = this._teamManager.getTeam(2);
         this.showCapturePoints(team1, team2);
     }
 
     private showTeamScores(team1: Team, team2: Team): void {
-        teamScores(team1.modObject, team1.scoreAccessor, team2.scoreAccessor);
-        teamScores(team2.modObject, team2.scoreAccessor, team1.scoreAccessor);
+        renderTeamScores(team1.modObject, team1.scoreAccessor, team2.scoreAccessor);
+        renderTeamScores(team2.modObject, team2.scoreAccessor, team1.scoreAccessor);
     }
 
     private showTeamScoreBars(team1: Team, team2: Team): void {
-        const maxScore = gameModeConfig.targetScore;
-        teamScoreBars(team1.modObject, team1.scoreAccessor, team2.scoreAccessor, maxScore);
-        teamScoreBars(team2.modObject, team2.scoreAccessor, team1.scoreAccessor, maxScore);
+        const initialScore = gameModeConfig.initialTickets;
+        renderTeamProgressionBars(team1.modObject, team1.scoreAccessor, team2.scoreAccessor, initialScore);
+        renderTeamProgressionBars(team2.modObject, team2.scoreAccessor, team1.scoreAccessor, initialScore);
     }
 
     private showCapturePoints(team1: Team, team2: Team): void {
@@ -59,17 +64,16 @@ export class GameUIManager {
             ownerTeamIdAccessor: capturePoint.ownerTeamIdAccessor,
             isCapturingAccessor: capturePoint.isCapturingAccessor,
         }));
-
-        capturePoints(team1.modObject, capturePointsData);
-        capturePoints(team2.modObject, capturePointsData);
+        renderAllCapturePoints(team1.modObject, capturePointsData);
+        renderAllCapturePoints(team2.modObject, capturePointsData);
     }
 
     private handleRestrictedAreaPlayerRegistered(modPlayer: mod.Player, redeployTimer: RedeployTimer): void {
-        restrictedAreaWarning(modPlayer, redeployTimer.isActiveAccessor, redeployTimer.timeToRedeployAccessor);
+        renderRestrictedAreaWarning(modPlayer, redeployTimer.isActiveAccessor, redeployTimer.timeToRedeployAccessor);
     }
 
     private handleCapturePointManagerPlayerRegistered(modPlayer: mod.Player, progressTracker: ProgressTracker): void {
-        flagCaptureProgress(
+        renderFlagCaptureProgress(
             modPlayer,
             progressTracker.letterAccessor,
             progressTracker.isActiveAccessor,

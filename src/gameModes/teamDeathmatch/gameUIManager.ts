@@ -1,8 +1,8 @@
 import { Events } from 'bf6-portal-utils/events';
 import type { TeamManager } from '../../modules/team/teamManager';
 import type { Team } from '../../modules/team/team';
-import { gameModeConfig } from '../teamDeathmatch/gameModeConfig';
-import { targetScore, teamScoreBarsTDM, teamScores } from '../../gameUI/teamScoreUI';
+import { gameModeConfig } from './config';
+import { renderTeamProgressionBarsWithTargetScore, renderTeamScores } from '../../UI/teamScoreUI';
 
 export class GameUIManager {
     private static _instance: GameUIManager | undefined;
@@ -23,23 +23,26 @@ export class GameUIManager {
         const team2 = this._teamManager.getTeam(2);
         this.showTeamScores(team1, team2);
         this.showTeamScoreBars(team1, team2);
-        this.showTargetScore(team1, team2);
     }
 
     private showTeamScores(team1: Team, team2: Team): void {
-        teamScores(team1.modObject, team1.scoreAccessor, team2.scoreAccessor);
-        teamScores(team2.modObject, team2.scoreAccessor, team1.scoreAccessor);
+        renderTeamScores(team1.modObject, team1.scoreAccessor, team2.scoreAccessor);
+        renderTeamScores(team2.modObject, team2.scoreAccessor, team1.scoreAccessor);
     }
 
     private showTeamScoreBars(team1: Team, team2: Team): void {
-        const maxScore = gameModeConfig.targetScore;
-        teamScoreBarsTDM(team1.modObject, team1.scoreAccessor, team2.scoreAccessor, maxScore);
-        teamScoreBarsTDM(team2.modObject, team2.scoreAccessor, team1.scoreAccessor, maxScore);
-    }
-
-    private showTargetScore(team1: Team, team2: Team): void {
-        const gamModeTargetScore = gameModeConfig.targetScore;
-        targetScore(team1.modObject, gamModeTargetScore);
-        targetScore(team2.modObject, gamModeTargetScore);
+        const gameModeTargetScore = gameModeConfig.targetScore;
+        renderTeamProgressionBarsWithTargetScore(
+            team1.modObject,
+            team1.scoreAccessor,
+            team2.scoreAccessor,
+            gameModeTargetScore
+        );
+        renderTeamProgressionBarsWithTargetScore(
+            team2.modObject,
+            team2.scoreAccessor,
+            team1.scoreAccessor,
+            gameModeTargetScore
+        );
     }
 }

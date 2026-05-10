@@ -2,7 +2,7 @@ import { Clocks } from 'bf6-portal-utils/clocks';
 import { SolidUI } from 'bf6-portal-utils/solid-ui/index.ts';
 import type { Player } from '../player/player.ts';
 import { Sounds } from 'bf6-portal-utils/sounds';
-import { restrictedAreaConfig } from './restrictedAreaConfig.ts';
+import { restrictedAreaConfig } from './config.ts';
 
 export class RedeployTimer {
     private _timeToRedeploy = SolidUI.createSignal(0);

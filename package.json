@@ -1,6 +1,6 @@
 {
     "name": "bf6-portal-starter-kit",
-    "version": "1.0.21",
+    "version": "1.0.0",
     "description": "This is a ready-made template for starting Battlefield 6 Portal development. It’s built as a thin, structured layer on\r top of `bf6-portal-utils`, that gives you a clean, object-oriented structure plus a set of core gameplay mechanics out\r of the box.",
     "keywords": [
         "template",

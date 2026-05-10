@@ -1,10 +1,13 @@
 import { Events } from 'bf6-portal-utils/events';
-import { Team } from '../team/team';
-import { teamConfig } from './teamConfig';
+import { Team } from './team';
+import { teamConfig } from './config';
+
+type TeamsInitializedCallback = () => void;
 
 export class TeamManager {
     private static _instance: TeamManager | undefined;
     private _teams: Team[] = [];
+    private _teamsInitializedCallbacks: TeamsInitializedCallback[] = [];
 
     private constructor() {
         Events.OnGameModeStarted.subscribe(this.handleGameModeStarted.bind(this));
@@ -30,9 +33,16 @@ export class TeamManager {
         return this._teams[teamId - 1];
     }
 
+    public subscribeTeamsInitialized(callback: TeamsInitializedCallback): void {
+        this._teamsInitializedCallbacks.push(callback);
+    }
+
     private handleGameModeStarted(): void {
         for (const config of teamConfig.objects ?? []) {
             this._teams.push(new Team(mod.GetTeam(config.teamId)));
+        }
+        for (const callback of this._teamsInitializedCallbacks) {
+            callback();
         }
     }
 }

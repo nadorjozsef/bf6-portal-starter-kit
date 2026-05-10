@@ -3,8 +3,7 @@ import { PlayerManager } from '../../modules/player/playerManager';
 import { TeamManager } from '../../modules/team/teamManager';
 import type { Player } from '../../modules/player/player';
 import type { Team } from '../../modules/team/team';
-import { convertArray } from '../../helpers';
-import { gameModeConfig } from './gameModeConfig';
+import { gameModeConfig } from './config';
 
 export class GameMode {
     private static _instance: GameMode | undefined;
@@ -15,7 +14,6 @@ export class GameMode {
     ) {
         Events.OnGameModeStarted.subscribe(this.handleGameModeStarted.bind(this));
         Events.OnPlayerEarnedKill.subscribe(this.handlePlayerEarnedKill.bind(this));
-        Events.OnCapturePointCaptured.subscribe(this.handleCapturePointCaptured.bind(this));
     }
 
     static GetInstance(playerManager: PlayerManager, teamManager: TeamManager): GameMode {
@@ -23,16 +21,6 @@ export class GameMode {
             GameMode._instance = new GameMode(playerManager, teamManager);
         }
         return GameMode._instance;
-    }
-
-    private handleCapturePointCaptured(capturePoint: mod.CapturePoint): void {
-        const modTeam = mod.GetCurrentOwnerTeam(capturePoint);
-        this._teamManager.getTeam(modTeam).score += gameModeConfig.teamCaptureScore;
-        const modPlayersArray = mod.GetPlayersOnPoint(capturePoint);
-        const modPlayers = convertArray<mod.Player>(modPlayersArray);
-        for (const player of this._playerManager.getPlayers(modPlayers)) {
-            player.score += gameModeConfig.playerCaptureScore;
-        }
     }
 
     private handleGameModeStarted(): void {

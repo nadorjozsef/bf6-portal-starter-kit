@@ -1,5 +1,5 @@
 import { Events } from 'bf6-portal-utils/events/index.ts';
-import { restrictedAreaConfig } from './restrictedAreaConfig.ts';
+import { restrictedAreaConfig } from './config.ts';
 import { RedeployTimer } from './redeployTimer.ts';
 import type { PlayerManager } from '../player/playerManager.ts';
 

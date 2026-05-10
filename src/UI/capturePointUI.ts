@@ -4,7 +4,13 @@ import { UIText } from 'bf6-portal-utils/ui/components/text';
 import { SolidUI } from 'bf6-portal-utils/solid-ui';
 import { Timers } from 'bf6-portal-utils/timers';
 
-export function flagCaptureProgress(
+interface CapturePointData {
+    letter: string;
+    ownerTeamIdAccessor: SolidUI.Accessor<number>;
+    isCapturingAccessor: SolidUI.Accessor<boolean>;
+}
+
+export function renderFlagCaptureProgress(
     player: mod.Player,
     letterAccessor: SolidUI.Accessor<string>,
     isActiveAccessor: SolidUI.Accessor<boolean>,
@@ -57,7 +63,7 @@ export function flagCaptureProgress(
     );
 }
 
-export function capturePoints(modTeam: mod.Team, capturePoints: CapturePointData[]): void {
+export function renderAllCapturePoints(modTeam: mod.Team, capturePoints: CapturePointData[]): void {
     const numberOfCapturePoints = capturePoints.length;
     const boxWidth = 32;
     const gap = 20;
@@ -79,14 +85,14 @@ export function capturePoints(modTeam: mod.Team, capturePoints: CapturePointData
     }
 }
 
-export function capturePointProgress(
+export function renderCapturePointProgress(
     player: mod.Player,
     isActiveAccessor: SolidUI.Accessor<boolean>,
     friendlyPlayersCountAccessor: SolidUI.Accessor<number>,
     enemyPlayersCountAccessor: SolidUI.Accessor<number>,
     progressAccessor: SolidUI.Accessor<number>
-): UIContainer {
-    const livesUI = SolidUI.h(UIContainer, {
+): void {
+    const mainContainer = SolidUI.h(UIContainer, {
         position: { x: 400, y: 100 },
         size: { width: 100, height: 100 },
         bgColor: UI.COLORS.GREEN,
@@ -107,7 +113,7 @@ export function capturePointProgress(
         textColor: UI.COLORS.WHITE,
         depth: mod.UIDepth.AboveGameUI,
         receiver: player,
-        parent: livesUI,
+        parent: mainContainer,
     });
     SolidUI.h(UIText, {
         position: { x: 0, y: 30 },
@@ -119,7 +125,7 @@ export function capturePointProgress(
         textColor: UI.COLORS.WHITE,
         depth: mod.UIDepth.AboveGameUI,
         receiver: player,
-        parent: livesUI,
+        parent: mainContainer,
     });
     SolidUI.h(UIText, {
         position: { x: 0, y: 60 },
@@ -131,9 +137,8 @@ export function capturePointProgress(
         textColor: UI.COLORS.WHITE,
         depth: mod.UIDepth.AboveGameUI,
         receiver: player,
-        parent: livesUI,
+        parent: mainContainer,
     });
-    return livesUI;
 }
 
 function getStringKeyForLetter(letter: string): string {
@@ -155,12 +160,6 @@ function getStringKeyForLetter(letter: string): string {
         default:
             return '';
     }
-}
-
-interface CapturePointData {
-    letter: string;
-    ownerTeamIdAccessor: SolidUI.Accessor<number>;
-    isCapturingAccessor: SolidUI.Accessor<boolean>;
 }
 
 function playerProgressBars(
@@ -744,3 +743,5 @@ function grayCapturePoint(
 
     return squareContainer;
 }
+
+// This file has been updated

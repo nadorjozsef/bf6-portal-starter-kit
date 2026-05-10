@@ -5,9 +5,9 @@ export interface CapturePointConfig {
 }
 
 export const capturePointConfig: CapturePointConfig = {
-    captureTime: 5,
-    neutralizationTime: 5,
-    maxCaptureMultiplier: 2,
+    captureTime: 15,
+    neutralizationTime: 20,
+    maxCaptureMultiplier: 3,
 };
 
 export function setCapturePointOverrides(overrides: Partial<CapturePointConfig>): void {

@@ -3,11 +3,11 @@ import { UIContainer } from 'bf6-portal-utils/ui/components/container';
 import { UIText } from 'bf6-portal-utils/ui/components/text';
 import { SolidUI } from 'bf6-portal-utils/solid-ui';
 
-export function restrictedAreaWarning(
+export function renderRestrictedAreaWarning(
     player: mod.Player,
     isActiveAccessor: SolidUI.Accessor<boolean>,
     timeToRedeployAccessor: SolidUI.Accessor<number>
-): UIContainer {
+): void {
     const container = SolidUI.h(UIContainer, {
         position: { x: 0, y: 200 },
         size: { width: 500, height: 200 },
@@ -17,6 +17,7 @@ export function restrictedAreaWarning(
         visible: isActiveAccessor,
         depth: mod.UIDepth.AboveGameUI,
         anchor: mod.UIAnchor.TopCenter,
+        receiver: player,
     });
     SolidUI.h(UIText, {
         message: () => mod.Message(mod.stringkeys.gameUI.timeToRedeploy, timeToRedeployAccessor()),
@@ -66,6 +67,4 @@ export function restrictedAreaWarning(
         parent: container,
         receiver: player,
     });
-
-    return container;
 }

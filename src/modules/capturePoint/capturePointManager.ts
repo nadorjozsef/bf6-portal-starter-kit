@@ -2,15 +2,17 @@ import { Events } from 'bf6-portal-utils/events';
 import { CapturePoint } from './capturePoint';
 import { convertArray } from '../../helpers';
 import { ProgressTracker } from './progressTracker';
-import { capturePointConfig } from './capturePointConfig';
+import { capturePointConfig } from './config';
 
-type RegisterPlayerCallback = (player: mod.Player, progressTracker: ProgressTracker) => void;
+type PlayerRegisteredCallback = (player: mod.Player, progressTracker: ProgressTracker) => void;
+type CapturePointsInitializedCallback = () => void;
 
 export class CapturePointManager {
     private static _instance: CapturePointManager | undefined;
     private _capturePoints: CapturePoint[] = [];
     private _progressTracker: ProgressTracker[] = [];
-    private _registerPlayerCallbacks: RegisterPlayerCallback[] = [];
+    private _registerPlayerCallbacks: PlayerRegisteredCallback[] = [];
+    private _capturePointsInitializedCallbacks: CapturePointsInitializedCallback[] = [];
 
     private constructor() {
         Events.OnGameModeStarted.subscribe(this.handleGameModeStarted.bind(this));
@@ -30,8 +32,12 @@ export class CapturePointManager {
         return CapturePointManager._instance;
     }
 
-    public subscribePlayerRegistered(callback: RegisterPlayerCallback): void {
+    public subscribePlayerRegistered(callback: PlayerRegisteredCallback): void {
         this._registerPlayerCallbacks.push(callback);
+    }
+
+    public subscribeCapturePointsInitialized(callback: CapturePointsInitializedCallback): void {
+        this._capturePointsInitializedCallbacks.push(callback);
     }
 
     public getCapturePoints(): CapturePoint[] {
@@ -66,6 +72,9 @@ export class CapturePointManager {
             mod.SetCapturePointCapturingTime(capturePoint.modObject, capturePointConfig.captureTime);
             mod.SetCapturePointNeutralizationTime(capturePoint.modObject, capturePointConfig.neutralizationTime);
             mod.SetMaxCaptureMultiplier(capturePoint.modObject, capturePointConfig.maxCaptureMultiplier);
+        }
+        for (const callback of this._capturePointsInitializedCallbacks) {
+            callback();
         }
     }
 

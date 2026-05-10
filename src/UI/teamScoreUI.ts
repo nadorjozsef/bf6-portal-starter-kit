@@ -13,12 +13,11 @@ interface TeamScoreProps {
 interface TeamScoreBarProps {
     backgroundColor: mod.Vector;
     foregroundColor: mod.Vector;
-    progressionType: 'shrinking' | 'growing';
     progressionDirection: 'leftToRight' | 'rightToLeft';
     maxScore: number;
 }
 
-export function teamScores(
+export function renderTeamScores(
     modTeam: mod.Team,
     teamScoreAccessor: SolidUI.Accessor<number>,
     opponentScoreAccessor: SolidUI.Accessor<number>
@@ -51,11 +50,11 @@ export function teamScores(
     });
 }
 
-export function teamScoreBars(
+export function renderTeamProgressionBars(
     modTeam: mod.Team,
     teamScoreAccessor: SolidUI.Accessor<number>,
     opponentScoreAccessor: SolidUI.Accessor<number>,
-    maxScore: number
+    initialScore: number
 ): void {
     const leftContainer = SolidUI.h(UIContainer, {
         position: { x: -94, y: 64 },
@@ -78,24 +77,22 @@ export function teamScoreBars(
     teamScoreBar(leftContainer, modTeam, teamScoreAccessor, {
         foregroundColor: UI.COLORS.BF_BLUE_BRIGHT,
         backgroundColor: UI.COLORS.BF_BLUE_DARK,
-        progressionType: 'shrinking',
-        progressionDirection: 'rightToLeft',
-        maxScore,
+        progressionDirection: 'leftToRight',
+        maxScore: initialScore,
     });
     teamScoreBar(rightContainer, modTeam, opponentScoreAccessor, {
         foregroundColor: UI.COLORS.BF_RED_BRIGHT,
         backgroundColor: UI.COLORS.BF_RED_DARK,
-        progressionType: 'shrinking',
-        progressionDirection: 'leftToRight',
-        maxScore,
+        progressionDirection: 'rightToLeft',
+        maxScore: initialScore,
     });
 }
 
-export function teamScoreBarsTDM(
+export function renderTeamProgressionBarsWithTargetScore(
     modTeam: mod.Team,
     teamScoreAccessor: SolidUI.Accessor<number>,
     opponentScoreAccessor: SolidUI.Accessor<number>,
-    maxScore: number
+    targetScore: number
 ): void {
     const leftContainer = SolidUI.h(UIContainer, {
         position: { x: -114, y: 64 },
@@ -118,20 +115,16 @@ export function teamScoreBarsTDM(
     teamScoreBar(leftContainer, modTeam, teamScoreAccessor, {
         foregroundColor: UI.COLORS.BF_BLUE_BRIGHT,
         backgroundColor: UI.COLORS.BF_BLUE_DARK,
-        progressionType: 'shrinking',
-        progressionDirection: 'rightToLeft',
-        maxScore,
+        progressionDirection: 'leftToRight',
+        maxScore: targetScore,
     });
     teamScoreBar(rightContainer, modTeam, opponentScoreAccessor, {
         foregroundColor: UI.COLORS.BF_RED_BRIGHT,
         backgroundColor: UI.COLORS.BF_RED_DARK,
-        progressionType: 'shrinking',
-        progressionDirection: 'leftToRight',
-        maxScore,
+        progressionDirection: 'rightToLeft',
+        maxScore: targetScore,
     });
-}
 
-export function targetScore(modTeam: mod.Team, targetScore: number) {
     const mainContainer = SolidUI.h(UIContainer, {
         position: { x: 0, y: 54 },
         size: { width: 64, height: 30 },
@@ -244,14 +237,11 @@ function teamScoreBar(
     scoreAccessor: SolidUI.Accessor<number>,
     props: TeamScoreBarProps
 ): UIContainer {
-    const [widthSignal, setWidthSignal] = SolidUI.createSignal(
-        props.progressionType === 'shrinking' ? parent.width : 0
-    );
+    const [widthSignal, setWidthSignal] = SolidUI.createSignal(0);
 
     SolidUI.createEffect(() => {
         const ratio = scoreAccessor() / props.maxScore;
-        const targetRatio = props.progressionType === 'shrinking' ? 1 - ratio : ratio;
-        setWidthSignal(Math.round(targetRatio * parent.width));
+        setWidthSignal(Math.round(ratio * parent.width));
     });
     const container = SolidUI.h(UIContainer, {
         position: { x: 0, y: 0 },
@@ -275,10 +265,7 @@ function teamScoreBar(
         bgAlpha: 0.75,
         visible: true,
         depth: mod.UIDepth.AboveGameUI,
-        anchor:
-            (props.progressionDirection === 'leftToRight') === (props.progressionType === 'growing')
-                ? mod.UIAnchor.TopLeft
-                : mod.UIAnchor.TopRight,
+        anchor: props.progressionDirection === 'leftToRight' ? mod.UIAnchor.TopLeft : mod.UIAnchor.TopRight,
         parent: container,
         receiver: modTeam,
     });

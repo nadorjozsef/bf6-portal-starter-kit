@@ -1,5 +1,3 @@
-import { configOverrides } from '../../configOverrides.ts';
-
 export interface GameModeConfig {
     targetScore: number;
     initialTickets: number;
@@ -10,7 +8,7 @@ export interface GameModeConfig {
     killScore: number; // game mode
 }
 
-const defaultConfig: GameModeConfig = {
+export const gameModeConfig: GameModeConfig = {
     targetScore: 50,
     initialTickets: 0,
     timeLimit: 600,
@@ -20,12 +18,6 @@ const defaultConfig: GameModeConfig = {
     killScore: 1,
 };
 
-export const gameModeConfig: GameModeConfig = {
-    targetScore: configOverrides.gameMode?.targetScore ?? defaultConfig.targetScore,
-    initialTickets: configOverrides.gameMode?.initialTickets ?? defaultConfig.initialTickets,
-    timeLimit: configOverrides.gameMode?.timeLimit ?? defaultConfig.timeLimit,
-    ticketBleedInterval: configOverrides.gameMode?.ticketBleedInterval ?? defaultConfig.ticketBleedInterval,
-    teamCaptureScore: configOverrides.gameMode?.teamCaptureScore ?? defaultConfig.teamCaptureScore,
-    playerCaptureScore: configOverrides.gameMode?.playerCaptureScore ?? defaultConfig.playerCaptureScore,
-    killScore: configOverrides.gameMode?.killScore ?? defaultConfig.killScore,
-};
+export function setGameModeOverrides(overrides: Partial<GameModeConfig>): void {
+    Object.assign(gameModeConfig, overrides);
+}

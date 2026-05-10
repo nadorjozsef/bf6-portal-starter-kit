@@ -2,7 +2,7 @@ import { Clocks } from 'bf6-portal-utils/clocks';
 import { SolidUI } from 'bf6-portal-utils/solid-ui/index.ts';
 import type { Player } from '../player/player.ts';
 import { Sounds } from 'bf6-portal-utils/sounds';
-import { mergedConfig } from './restrictedAreaConfig.ts';
+import { restrictedAreaConfig } from './restrictedAreaConfig.ts';
 
 export class RedeployTimer {
     private _timeToRedeploy = SolidUI.createSignal(0);
@@ -33,7 +33,7 @@ export class RedeployTimer {
         this._isActive[1](false);
     }
 
-    private _redeployClock = new Clocks.CountDownClock(mergedConfig.redeployTime, {
+    private _redeployClock = new Clocks.CountDownClock(restrictedAreaConfig.redeployTime, {
         onSecond: (seconds) => this.onSecond(seconds),
         onComplete: () => {
             this.onComplete();
@@ -42,7 +42,7 @@ export class RedeployTimer {
 
     private onSecond(seconds: number): void {
         this._timeToRedeploy[1](seconds);
-        if (seconds < mergedConfig.redeployTime) {
+        if (seconds < restrictedAreaConfig.redeployTime) {
             this.playSound();
         }
     }

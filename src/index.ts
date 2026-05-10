@@ -1,13 +1,14 @@
-import { GameMode } from './modules/gameMode/gameMode.ts';
-import { GameUI } from './modules/gameUI/gameUI.ts';
-import { PlayerManager } from './modules/player/playerManager.ts';
-import { TeamManager } from './modules/team/teamManager.ts';
-import { Scoreboard } from './modules/scoreboard/scoreboard.ts';
-import { CapturePointManager } from './modules/capturePoint/capturePointManager.ts';
-import { GameUIManager } from './modules/gameUI/gameUIManager.ts';
-import { ScoreboardManager } from './modules/scoreboard/scoreboardManager.ts';
-import { RestrictedAreaManager } from './modules/restrictedArea/restrictedAreaManager.ts';
-import { debug } from './debugTool/adminDebugTool.ts';
+import './configOverrides';
+import { GameMode } from './modules/gameMode/gameMode';
+import { GameUI } from './modules/gameUI/gameUI';
+import { PlayerManager } from './modules/player/playerManager';
+import { TeamManager } from './modules/team/teamManager';
+import { Scoreboard } from './modules/scoreboard/scoreboard';
+import { CapturePointManager } from './modules/capturePoint/capturePointManager';
+import { GameUIManager } from './modules/gameUI/gameUIManager';
+import { ScoreboardManager } from './modules/scoreboard/scoreboardManager';
+import { RestrictedAreaManager } from './modules/restrictedArea/restrictedAreaManager';
+import { debug } from './debugTool/adminDebugTool';
 
 const gameUI = GameUI.getInstance();
 const playerManager = PlayerManager.getInstance();

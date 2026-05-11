@@ -183,7 +183,7 @@ function _applyAnchor(el, anchor, x, y) {
     if (a.includes('Left')) {
         el.style.left = x + 'px';
     } else if (a.includes('Right')) {
-        el.style.right = -x + 'px';
+        el.style.right = x + 'px';
     } else {
         el.style.left = `calc(50% + ${x}px)`;
     }
@@ -192,7 +192,7 @@ function _applyAnchor(el, anchor, x, y) {
     if (a.includes('Top')) {
         el.style.top = y + 'px';
     } else if (a.includes('Bottom')) {
-        el.style.bottom = -y + 'px';
+        el.style.bottom = y + 'px';
     } else {
         el.style.top = `calc(50% + ${y}px)`;
     }

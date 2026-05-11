@@ -214,9 +214,9 @@ function _applyBgFill(el, fill, color, alpha) {
             el.style.backgroundColor = c.toCSS(a);
             break;
         case 'Blur':
-            el.style.backgroundColor = c.toCSS(a * 0.78);
-            el.style.backdropFilter = 'blur(12px)';
-            el.style.webkitBackdropFilter = 'blur(12px)';
+            el.style.backgroundColor = c.toCSS(a * 0.25);
+            el.style.backdropFilter = 'blur(4px) brightness(0.35)';
+            el.style.webkitBackdropFilter = 'blur(4px) brightness(0.35)';
             break;
         case 'GradientTop':
             el.style.background = `linear-gradient(to bottom, ${c.toCSS(a)}, ${c.toCSS(0)})`;

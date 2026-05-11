@@ -11,6 +11,8 @@ let _viewport = null;
 
 // ---- Viewport ----
 
+const HEADER_H = 32;
+
 export function initViewport(id = 'viewport') {
     _viewport = document.getElementById(id);
     if (!_viewport) throw new Error(`Element #${id} not found`);
@@ -19,8 +21,9 @@ export function initViewport(id = 'viewport') {
     s.height = VIEWPORT_H + 'px';
     s.position = 'relative';
     s.overflow = 'hidden';
-    _rescale();
-    window.addEventListener('resize', _rescale);
+    s.marginTop = HEADER_H + 'px';
+    s.marginLeft = 'auto';
+    s.marginRight = 'auto';
 
     // Debug mode: press D to toggle element outlines
     window.addEventListener('keydown', (e) => {
@@ -28,15 +31,6 @@ export function initViewport(id = 'viewport') {
             _viewport.classList.toggle('debug');
         }
     });
-}
-
-function _rescale() {
-    if (!_viewport) return;
-    const s = Math.min(window.innerWidth / VIEWPORT_W, window.innerHeight / VIEWPORT_H);
-    _viewport.style.transform = `scale(${s})`;
-    _viewport.style.transformOrigin = 'top left';
-    _viewport.style.marginLeft = (window.innerWidth - VIEWPORT_W * s) / 2 + 'px';
-    _viewport.style.marginTop = (window.innerHeight - VIEWPORT_H * s) / 2 + 'px';
 }
 
 export function setBackgroundImage(url) {

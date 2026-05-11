@@ -13,7 +13,7 @@
         html, body {
             width: 100%; height: 100%;
             background: #08080c;
-            overflow: hidden;
+            overflow: auto;
             font-family: 'Rajdhani', 'Segoe UI', sans-serif;
         }
 
@@ -99,5 +99,18 @@
 
     <!-- Load the demo UI -->
     <script type="module" src="src/demo.js"></script>
+
+    <!-- Hot-reload via SSE (requires dev-server.mjs) -->
+    <script>
+        (function () {
+            const sse = new EventSource('/__reload');
+            sse.onmessage = (e) => {
+                if (e.data === 'reload') {
+                    console.log('[hot-reload] reloading…');
+                    location.reload();
+                }
+            };
+        })();
+    </script>
 </body>
 </html>

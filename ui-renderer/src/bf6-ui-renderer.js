@@ -297,9 +297,8 @@ export class UIText {
         s.alignItems = 'center';
         s.justifyContent = 'center';
         s.textAlign = 'center';
-        s.fontFamily = "'Rajdhani', 'Segoe UI', 'Arial Narrow', sans-serif";
-        s.fontWeight = '600';
-        s.letterSpacing = '2px';
+        s.fontFamily = "'BF Text', 'Segoe UI', 'Arial Narrow', sans-serif";
+        s.letterSpacing = '0.5px';
         s.lineHeight = '1';
         s.whiteSpace = 'nowrap';
 
@@ -316,7 +315,7 @@ export class UIText {
 
         const msg = typeof params.message === 'function' ? params.message() : params.message;
         this.element.textContent = msg ?? '';
-        if (params.textSize) s.fontSize = params.textSize + 'px';
+        if (params.textSize) s.fontSize = (params.textSize * 0.9) + 'px';
         if (params.textColor) s.color = params.textColor.toCSS(params.textAlpha ?? 1);
 
         this.element.title = `UIText ${g.w}×${g.h} "${this.element.textContent}"`;
@@ -364,9 +363,9 @@ export class UITextButton {
         s.alignItems = 'center';
         s.justifyContent = 'center';
         s.textAlign = 'center';
-        s.fontFamily = "'Rajdhani', 'Segoe UI', 'Arial Narrow', sans-serif";
-        s.fontWeight = '600';
-        s.letterSpacing = '2px';
+        s.fontFamily = "'BF Text', 'Segoe UI', 'Arial Narrow', sans-serif";
+        s.fontWeight = '700';
+        s.letterSpacing = '-0.5px';
         s.lineHeight = '1';
 
         const baseColor = params.baseColor || params.bgColor;
@@ -377,7 +376,7 @@ export class UITextButton {
 
         const msg = typeof params.message === 'function' ? params.message() : params.message;
         this.element.textContent = msg ?? '';
-        if (params.textSize) s.fontSize = params.textSize + 'px';
+        if (params.textSize) s.fontSize = (params.textSize * 0.9) + 'px';
         if (params.textColor) s.color = params.textColor.toCSS(params.textAlpha ?? 1);
         if (params.enabled === false) s.opacity = '0.5';
 

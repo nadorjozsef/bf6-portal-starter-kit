@@ -12,7 +12,7 @@ export function setupConquestMode(): void {
     const playerManager = PlayerManager.getInstance();
     const teamManager = TeamManager.getInstance();
     const capturePointManager = CapturePointManager.getInstance();
-    GameMode.GetInstance(playerManager, teamManager);
+    GameMode.GetInstance(playerManager, teamManager, capturePointManager);
     const restrictedAreas = RestrictedAreaManager.getInstance(playerManager);
     GameUIManager.getInstance(teamManager, capturePointManager, restrictedAreas);
     const scoreboard = Scoreboard.getInstance();

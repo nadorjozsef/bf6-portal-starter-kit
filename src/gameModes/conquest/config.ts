@@ -22,14 +22,14 @@ export interface GameModeConfig {
     ticketBleedInterval: number;
     teamCaptureScore: number;
     playerCaptureScore: number;
-    killScore: number;
+    playerKillScore: number;
 }
 
 export const gameModeConfig: GameModeConfig = {
     initialTickets: 50,
     timeLimit: 600,
-    ticketBleedInterval: 2,
+    ticketBleedInterval: 10,
     teamCaptureScore: 10,
     playerCaptureScore: 300,
-    killScore: 1,
+    playerKillScore: 1,
 };

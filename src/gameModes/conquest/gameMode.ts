@@ -1,17 +1,20 @@
 import { Events } from 'bf6-portal-utils/events';
 import { PlayerManager } from '../../modules/player/playerManager';
 import { TeamManager } from '../../modules/team/teamManager';
-import type { Player } from '../../modules/player/player';
+import { Player } from '../../modules/player/player';
 import { convertArray } from '../../helpers';
 import { gameModeConfig } from './config';
-import { debug } from '../../debugTool/adminDebugTool';
+import { Timers } from 'bf6-portal-utils/timers';
+import { CapturePointManager } from '../../modules/capturePoint/capturePointManager';
+import { Team } from '../../modules/team/team';
 
 export class GameMode {
     private static _instance: GameMode | undefined;
 
     private constructor(
         private _playerManager: PlayerManager,
-        private _teamManager: TeamManager
+        private _teamManager: TeamManager,
+        private _capturePointManager: CapturePointManager
     ) {
         Events.OnGameModeStarted.subscribe(this.handleGameModeStarted.bind(this));
         Events.OnPlayerEarnedKill.subscribe(this.handlePlayerEarnedKill.bind(this));
@@ -19,9 +22,13 @@ export class GameMode {
         this._teamManager.subscribeTeamsInitialized(this.handleTeamsInitialized.bind(this));
     }
 
-    static GetInstance(playerManager: PlayerManager, teamManager: TeamManager): GameMode {
+    static GetInstance(
+        playerManager: PlayerManager,
+        teamManager: TeamManager,
+        capturePointManager: CapturePointManager
+    ): GameMode {
         if (!GameMode._instance) {
-            GameMode._instance = new GameMode(playerManager, teamManager);
+            GameMode._instance = new GameMode(playerManager, teamManager, capturePointManager);
         }
         return GameMode._instance;
     }
@@ -39,9 +46,27 @@ export class GameMode {
         }
     }
 
+    private startTicketBleedSystem(): void {
+        const team1 = this._teamManager.getTeam(1);
+        const team2 = this._teamManager.getTeam(2);
+        Timers.setInterval(() => {
+            const capturePoints = this._capturePointManager.getCapturePoints();
+            const team1CapturePointCount = capturePoints.filter((cp) => cp.ownerTeamId === team1.id).length;
+            const team2CapturePointCount = capturePoints.filter((cp) => cp.ownerTeamId === team2.id).length;
+            if (team1CapturePointCount > team2CapturePointCount) {
+                const ticketLoss = team1CapturePointCount - team2CapturePointCount;
+                this.updateTeamScore(team2, ticketLoss);
+            } else if (team2CapturePointCount > team1CapturePointCount) {
+                const ticketLoss = team2CapturePointCount - team1CapturePointCount;
+                this.updateTeamScore(team1, ticketLoss);
+            }
+        }, gameModeConfig.ticketBleedInterval * 1000);
+    }
+
     private handleGameModeStarted(): void {
         mod.SetGameModeTimeLimit(gameModeConfig.timeLimit);
         mod.LoadMusic(mod.MusicPackages.Core);
+        this.startTicketBleedSystem();
     }
 
     private handleTeamsInitialized(): void {
@@ -56,34 +81,27 @@ export class GameMode {
             return;
         }
         const player = this._playerManager.getPlayer(modPlayer);
-        this.updateTeamScore(player);
-        this.updatePlayerScore(player);
+        this.updatePlayerScore(player, gameModeConfig.playerKillScore);
+        this.updateTeamScore(this._teamManager.getTeam(player.teamId === 1 ? 2 : 1), 1);
+    }
 
-        // Todo: set winning, losing teams?, repeat?
+    private updateTeamScore(team: Team, scoreChange: number): void {
+        team.score = Math.max(0, team.score - scoreChange);
         const team1 = this._teamManager.getTeam(1);
         const team2 = this._teamManager.getTeam(2);
-        if (team1.score === 5 || team2.score === 5) {
+        // Todo: set winning, losing teams?, repeat?
+        if (team1.score <= 5 || team2.score <= 5) {
             mod.PlayMusic(mod.MusicEvents.Core_LastPhaseBegin);
         }
-    }
-
-    private updateTeamScore(player: Player) {
-        const team1 = this._teamManager.getTeam(1);
-        const team2 = this._teamManager.getTeam(2);
-        if (player.teamId === 1) {
-            team2.score--;
-        } else if (player.teamId === 2) {
-            team1.score--;
-        }
         if (team1.score <= 0) {
-            mod.EndGameMode(mod.GetTeam(2));
+            mod.EndGameMode(team2.modObject);
         } else if (team2.score <= 0) {
-            mod.EndGameMode(mod.GetTeam(1));
+            mod.EndGameMode(team1.modObject);
         }
     }
 
-    private updatePlayerScore(player: Player) {
+    private updatePlayerScore(player: Player, scoreChange: number): void {
         player.kills++;
-        player.score += gameModeConfig.killScore;
+        player.score += scoreChange;
     }
 }
